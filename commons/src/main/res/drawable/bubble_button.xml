@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/button_3d_overlay" android:state_focused="true"/>
+    <item android:drawable="@drawable/button_3d_overlay_pressed" android:state_pressed="true"/>
+
+    <!-- Default Button -->
+    <item android:drawable="@drawable/button_3d_overlay"/>
+</selector>

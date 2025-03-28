@@ -1,0 +1,9 @@
+build
+fastlane
+graphics
+.github
+.gradle
+.idea
+RecyclerView-FastScroller
+local.properties
+core
