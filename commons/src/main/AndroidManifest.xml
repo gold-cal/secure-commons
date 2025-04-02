@@ -10,9 +10,9 @@
         android:name="android.hardware.screen.portrait"
         android:required="false" />
 
-    <!-- <uses-permission
+    <uses-permission
         android:name="android.permission.USE_BIOMETRIC"
-        tools:node="remove" /> -->
+        tools:node="remove" />
 
     <!-- used by Reprint -->
     <uses-permission
@@ -20,12 +20,12 @@
         tools:node="remove" />
 
     <application android:supportsRtl="true">
-        <activity
+        <!-- <activity
             android:name="com.secure.commons.activities.ContributorsActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:label="@string/contributors"
-            android:parentActivityName="com.secure.commons.activities.AboutActivity" />
+            android:parentActivityName="com.secure.commons.activities.AboutActivity" /> -->
 
         <activity
             android:name="com.secure.commons.activities.FAQActivity"

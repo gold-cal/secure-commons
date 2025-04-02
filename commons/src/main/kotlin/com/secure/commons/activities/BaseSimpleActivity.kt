@@ -236,7 +236,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     // colorize the top toolbar and statusbar at scrolling down a bit
-    fun setupMaterialScrollListener(scrollingView: ScrollingView?, toolbar: Toolbar) {
+    /*fun setupMaterialScrollListener(scrollingView: ScrollingView?, toolbar: Toolbar) {
         this.scrollingView = scrollingView
         this.toolbar = toolbar
         if (scrollingView is RecyclerView) {
@@ -250,9 +250,9 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 scrollingChanged(scrollY, oldScrollY)
             }
         }
-    }
+    }*/
 
-    private fun scrollingChanged(newScrollY: Int, oldScrollY: Int) {
+    /*private fun scrollingChanged(newScrollY: Int, oldScrollY: Int) {
         if (newScrollY > 0 && oldScrollY == 0) {
             val colorFrom = window.statusBarColor
             val colorTo = getColoredMaterialStatusBarColor()
@@ -262,7 +262,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             val colorTo = getRequiredStatusBarColor()
             animateTopBarColors(colorFrom, colorTo)
         }
-    }
+    }*/
 
     fun animateTopBarColors(colorFrom: Int, colorTo: Int) {
         if (toolbar == null) {

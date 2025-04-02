@@ -32,7 +32,7 @@ class MainActivity : BaseSimpleActivity() {
 
         updateMaterialActivityViews(binding.mainCoordinator, binding.mainHolder,
             useTransparentNavigation = true, useTopSearchMenu = false)
-        setupMaterialScrollListener(binding.mainNestedScrollview, binding.mainToolbar)
+        //setupMaterialScrollListener(binding.mainNestedScrollview, binding.mainToolbar)
 
         binding.aboutActivity.setOnClickListener {
             val licenses = LICENSE_JODA

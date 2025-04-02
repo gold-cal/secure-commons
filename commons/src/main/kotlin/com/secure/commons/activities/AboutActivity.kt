@@ -45,7 +45,7 @@ class AboutActivity : BaseSimpleActivity() {
 
         updateMaterialActivityViews(binding.aboutCoordinator, binding.aboutHolder,
             useTransparentNavigation = true, useTopSearchMenu = false)
-        setupMaterialScrollListener(binding.aboutNestedScrollview, binding.aboutToolbar)
+        //setupMaterialScrollListener(binding.aboutNestedScrollview, binding.aboutToolbar)
 
         appName = intent.getStringExtra(APP_NAME) ?: ""
 

@@ -1,5 +1,5 @@
 package com.secure.commons.activities
-
+/*
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -27,7 +27,7 @@ class ContributorsActivity : BaseSimpleActivity() {
         updateTextColors(binding.contributorsHolder)
 
         updateMaterialActivityViews(binding.contributorsCoordinator, binding.contributorsHolder, useTransparentNavigation = true, useTopSearchMenu = false)
-        setupMaterialScrollListener(binding.contributorsNestedScrollview, binding.contributorsToolbar)
+        //setupMaterialScrollListener(binding.contributorsNestedScrollview, binding.contributorsToolbar)
 
         val accentColor = getProperAccentColor()
         binding.contributorsDevelopmentLabel.setTextColor(accentColor)
@@ -93,7 +93,7 @@ class ContributorsActivity : BaseSimpleActivity() {
                     text = getString(language.contributorsId)
                     setTextColor(textColor)
                 }
-            }
+            }*/
 
             /*inflater.inflate(R.layout.item_language_contributor, null).apply {
                 language_icon.setImageDrawable(getDrawable(language.iconId))
@@ -109,7 +109,7 @@ class ContributorsActivity : BaseSimpleActivity() {
 
                 contributors_languages_holder.addView(this)
             }*/
-            binding.contributorsLanguagesHolder.addView(itemLanguage.root)
+          /*  binding.contributorsLanguagesHolder.addView(itemLanguage.root)
         }
 
         binding.contributorsLabel.apply {
@@ -132,4 +132,4 @@ class ContributorsActivity : BaseSimpleActivity() {
         super.onResume()
         setupToolbar(binding.contributorsToolbar, NavigationIcon.Arrow)
     }
-}
+}*/
