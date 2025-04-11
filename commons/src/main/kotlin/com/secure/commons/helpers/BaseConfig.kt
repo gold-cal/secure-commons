@@ -103,9 +103,9 @@ open class BaseConfig(val context: Context) {
             prefs.edit().putInt(APP_ICON_COLOR, appIconColor).apply()
         }*/
 
-    var lastIconColor: Int
+    /*var lastIconColor: Int
         get() = prefs.getInt(LAST_ICON_COLOR, context.resources.getColor(R.color.color_icon, null))
-        set(lastIconColor) = prefs.edit().putInt(LAST_ICON_COLOR, lastIconColor).apply()
+        set(lastIconColor) = prefs.edit().putInt(LAST_ICON_COLOR, lastIconColor).apply() */
 
     var customTextColor: Int
         get() = prefs.getInt(CUSTOM_TEXT_COLOR, textColor)

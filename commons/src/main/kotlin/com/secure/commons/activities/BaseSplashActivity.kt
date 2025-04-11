@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.secure.commons.R
 import com.secure.commons.extensions.*
+import com.secure.commons.helpers.CrashHandler
 import com.secure.commons.helpers.SIDELOADING_TRUE
 import com.secure.commons.helpers.SIDELOADING_UNCHECKED
 
@@ -14,6 +15,8 @@ abstract class BaseSplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
 
         if (baseConfig.appSideloadingStatus == SIDELOADING_UNCHECKED) {
             if (checkAppSideloading()) {

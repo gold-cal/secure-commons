@@ -34,7 +34,7 @@
     <color name="default_primary_color">@color/color_primary</color>
     <color name="default_app_icon_color">@color/md_red_900_dark</color>
     <color name="default_accent_color">@color/color_accent</color>
-    <color name="default_widget_bg_color">#AA000000</color>
+    <color name="default_widget_bg_color">#DD000000</color>
     <color name="default_widget_text_color">@color/md_grey_white_dark</color>
     <color name="default_widget_day_color">#AA5783A4</color>
 

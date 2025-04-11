@@ -20,12 +20,11 @@
         tools:node="remove" />
 
     <application android:supportsRtl="true">
-        <!-- <activity
-            android:name="com.secure.commons.activities.ContributorsActivity"
+        <activity
+            android:name="com.secure.commons.activities.CrashActivity"
             android:configChanges="orientation"
-            android:exported="false"
-            android:label="@string/contributors"
-            android:parentActivityName="com.secure.commons.activities.AboutActivity" /> -->
+            android:exported="true"
+            android:label="Crash Report" />
 
         <activity
             android:name="com.secure.commons.activities.FAQActivity"
