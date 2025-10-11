@@ -665,6 +665,7 @@
     <string name="medium">Medium</string>
     <string name="large">Large</string>
     <string name="extra_large">Extra large</string>
+    <string name="settings_color">Settings Color</string>
     <string name="password_protect_hidden_items">Password protect hidden item visibility</string>
     <string name="password_protect_whole_app">Password protect the whole application</string>
     <string name="password_protect_file_deletion">Password protect file deletion and moving</string>

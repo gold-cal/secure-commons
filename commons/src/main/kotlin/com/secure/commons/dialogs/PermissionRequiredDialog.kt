@@ -6,9 +6,10 @@ import com.secure.commons.R
 import com.secure.commons.databinding.DialogMessageBinding
 import com.secure.commons.extensions.getAlertDialogBuilder
 import com.secure.commons.extensions.openNotificationSettings
+import com.secure.commons.extensions.openRequestExactAlarmSettings
 import com.secure.commons.extensions.setupDialogStuff
 
-class PermissionRequiredDialog(val activity: Activity, textId: Int) {
+class PermissionRequiredDialog(val activity: Activity, textId: Int, positiveActionCallback: Int, id: String = "") {
     private var dialog: AlertDialog? = null
 
     init {
@@ -17,7 +18,13 @@ class PermissionRequiredDialog(val activity: Activity, textId: Int) {
         binding.message.text = activity.getString(textId)
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.grant_permission) { dialog, which -> activity.openNotificationSettings() }
+            .setPositiveButton(R.string.grant_permission) { dialog, which ->
+                if (positiveActionCallback == 1) {
+                    activity.openRequestExactAlarmSettings(id) // id = Application_id
+                } else {
+                    activity.openNotificationSettings()
+                }
+            }
             .setNegativeButton(R.string.cancel, null).apply {
                 val title = activity.getString(R.string.permission_required)
                 activity.setupDialogStuff(binding.root, this, titleText = title) { alertDialog ->

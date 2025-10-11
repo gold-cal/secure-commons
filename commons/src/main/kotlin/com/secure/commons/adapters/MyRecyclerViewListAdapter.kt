@@ -317,6 +317,10 @@ abstract class MyRecyclerViewListAdapter<T>(
         val view = layoutInflater.inflate(layoutType, parent, false)
         return ViewHolder(view)
     }
+    
+    protected fun createViewHolder(view: View): ViewHolder {
+        return ViewHolder(view)
+    }
 
     protected fun bindViewHolder(holder: ViewHolder) {
         holder.itemView.tag = holder

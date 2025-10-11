@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.graphics.Point
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore.*
@@ -19,6 +20,7 @@ import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -532,6 +534,16 @@ fun Context.openNotificationSettings() {
         // For Android versions below Oreo, you can't directly open the app's notification settings.
         // You can open the general notification settings instead.
         val intent = Intent(Settings.ACTION_SETTINGS)
+        startActivity(intent)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun Context.openRequestExactAlarmSettings(appId: String) {
+    if (isSPlus()) {
+        val uri = Uri.fromParts("package", appId, null)
+        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+        intent.data = uri
         startActivity(intent)
     }
 }
