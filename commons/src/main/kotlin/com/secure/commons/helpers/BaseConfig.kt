@@ -16,9 +16,9 @@ open class BaseConfig(val context: Context) {
         fun newInstance(context: Context) = BaseConfig(context)
     }
 
-    /*var appRunCount: Int
+    var appRunCount: Int
         get() = prefs.getInt(APP_RUN_COUNT, 0)
-        set(appRunCount) = prefs.edit().putInt(APP_RUN_COUNT, appRunCount).apply() */
+        set(appRunCount) = prefs.edit().putInt(APP_RUN_COUNT, appRunCount).apply()
 
     var lastVersion: Int
         get() = prefs.getInt(LAST_VERSION, 0)
@@ -375,10 +375,10 @@ open class BaseConfig(val context: Context) {
         get() = prefs.getBoolean(WAS_APP_ICON_CUSTOMIZATION_WARNING_SHOWN, false)
         set(wasAppIconCustomizationWarningShown) = prefs.edit().putBoolean(WAS_APP_ICON_CUSTOMIZATION_WARNING_SHOWN, wasAppIconCustomizationWarningShown)
             .apply()*/
-
-    var appSideloadingStatus: Int
+    // checks to make sure app was original simple mobile tools app
+    /*var appSideloadingStatus: Int
         get() = prefs.getInt(APP_SIDELOADING_STATUS, SIDELOADING_UNCHECKED)
-        set(appSideloadingStatus) = prefs.edit().putInt(APP_SIDELOADING_STATUS, appSideloadingStatus).apply()
+        set(appSideloadingStatus) = prefs.edit().putInt(APP_SIDELOADING_STATUS, appSideloadingStatus).apply()*/
 
     var dateFormat: String
         get() = prefs.getString(DATE_FORMAT, getDefaultDateFormat())!!

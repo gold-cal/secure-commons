@@ -2,6 +2,7 @@ package com.secure.commons.extensions
 
 import android.Manifest
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutManager
@@ -31,6 +32,9 @@ import com.secure.commons.models.AlarmSound
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
+
+val Context.notificationManager: NotificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 fun Context.getSharedPrefs() = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
@@ -516,5 +520,18 @@ fun Context.sendEmailIntent(recipient: String) {
     Intent(Intent.ACTION_SENDTO).apply {
         data = Uri.fromParts(KEY_MAILTO, recipient, null)
         launchActivityIntent(this)
+    }
+}
+
+fun Context.openNotificationSettings() {
+    if (isOreoPlus()) {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        startActivity(intent)
+    } else {
+        // For Android versions below Oreo, you can't directly open the app's notification settings.
+        // You can open the general notification settings instead.
+        val intent = Intent(Settings.ACTION_SETTINGS)
+        startActivity(intent)
     }
 }

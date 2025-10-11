@@ -45,7 +45,6 @@ class AboutActivity : BaseSimpleActivity() {
 
         updateMaterialActivityViews(binding.aboutCoordinator, binding.aboutHolder,
             useTransparentNavigation = true, useTopSearchMenu = false)
-        //setupMaterialScrollListener(binding.aboutNestedScrollview, binding.aboutToolbar)
 
         appName = intent.getStringExtra(APP_NAME) ?: ""
 
@@ -84,10 +83,6 @@ class AboutActivity : BaseSimpleActivity() {
             }
             aboutOtherLayout.removeAllViews()
         }
-        //binding.aboutSupportLayout.removeAllViews()
-        //binding.aboutHelpUsLayout.removeAllViews()
-        //binding.aboutSocialLayout.removeAllViews()
-        //about_other_layout.removeAllViews()
 
         setupFAQ()
         if (showBugReport) setupBugReport()
@@ -100,7 +95,6 @@ class AboutActivity : BaseSimpleActivity() {
     }
 
     private fun setupFAQ() {
-        //val faqItems = intent.serializable<ArrayList<FAQItem>>(APP_FAQ) // as ArrayList<FAQItem>
         if (faqItems.isNotEmpty()) {
             val itemBinding = ItemAboutBinding.inflate(layoutInflater, null, false)
             setupAboutItem(itemBinding, R.drawable.ic_question_mark_vector, R.string.frequently_asked_questions)
@@ -112,8 +106,6 @@ class AboutActivity : BaseSimpleActivity() {
     }
 
     private fun launchFAQActivity() {
-        //val faqItems = intent.serializable<ArrayList<FAQItem>>(APP_FAQ)// as ArrayList<FAQItem>
-            //intent.getSerializableExtra(APP_FAQ) as ArrayList<FAQItem>
         Intent(applicationContext, FAQActivity::class.java).apply {
             putExtra(APP_ICON_IDS, getAppIconIDs())
             putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
@@ -263,7 +255,7 @@ class AboutActivity : BaseSimpleActivity() {
 
             /*setOnClickListener {
                 val appId = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro").removePrefix("com.liturgical.")
-                val url = "https://simplemobiletools.com/privacy/$appId.txt"
+                val url = "https://privacy/$appId.txt"
                 launchViewIntent(url)
             }*/
 /*        }

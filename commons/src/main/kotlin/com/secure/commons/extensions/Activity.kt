@@ -543,6 +543,28 @@ fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
     }
 }
 
+fun Activity.handleAppPasswordProtection(callback: (success: Boolean) -> Unit) {
+    if (baseConfig.isAppPasswordProtectionOn) {
+        SecurityDialog(this, baseConfig.appPasswordHash, baseConfig.appProtectionType) { _, _, success ->
+            callback(success)
+        }
+    } else {
+        callback(true)
+    }
+}
+
+fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
+    if (baseConfig.isDeletePasswordProtectionOn) {
+        SecurityDialog(this, baseConfig.deletePasswordHash, baseConfig.deleteProtectionType) { _, _, success ->
+            if (success) {
+                callback()
+            }
+        }
+    } else {
+        callback()
+    }
+}
+
 fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean) -> Unit) {
     if (baseConfig.isFolderProtected(path)) {
         SecurityDialog(this, baseConfig.getFolderProtectionHash(path), baseConfig.getFolderProtectionType(path)) { _, _, success ->
@@ -776,6 +798,7 @@ fun BaseSimpleActivity.getAlarmSounds(type: Int, callback: (ArrayList<AlarmSound
     }
 }
 
+/*
 fun Activity.checkAppSideloading(): Boolean {
     val isSideloaded = when (baseConfig.appSideloadingStatus) {
         SIDELOADING_TRUE -> true
@@ -785,20 +808,20 @@ fun Activity.checkAppSideloading(): Boolean {
 
     baseConfig.appSideloadingStatus = if (isSideloaded) SIDELOADING_TRUE else SIDELOADING_FALSE
     if (isSideloaded) {
-        //showSideloadingDialog()
+        showSideloadingDialog()
     }
 
     return isSideloaded
-}
+}*/
 
-fun Activity.isAppSideloaded(): Boolean {
+/*fun Activity.isAppSideloaded(): Boolean {
     return try {
         getDrawable(R.drawable.ic_camera_vector)
         false
     } catch (e: Exception) {
         true
     }
-}
+}*/
 
 /*fun Activity.showSideloadingDialog() {
     AppSideloadedDialog(this) {

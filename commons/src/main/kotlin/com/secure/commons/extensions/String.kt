@@ -4,8 +4,14 @@ import android.content.Context
 import android.os.StatFs
 import android.provider.MediaStore
 import android.telephony.PhoneNumberUtils
+import android.widget.TextView
 import com.secure.commons.helpers.*
+import org.joda.time.DateTime
+import org.joda.time.Years
+import org.joda.time.format.DateTimeFormat
+import java.text.DateFormat
 import java.text.Normalizer
+import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.*
 
@@ -97,6 +103,35 @@ fun String.getAvailableStorageB(): Long {
     } catch (e: Exception) {
         -1L
     }
+}
+
+fun String.getDateTimeFromDateString(showYearsSince: Boolean, viewToUpdate: TextView? = null): DateTime {
+    val dateFormats = getDateFormats()
+    var date = DateTime()
+    for (format in dateFormats) {
+        try {
+            date = DateTime.parse(this, DateTimeFormat.forPattern(format))
+
+            val formatter = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+            var localPattern = (formatter as SimpleDateFormat).toLocalizedPattern()
+
+            val hasYear = format.contains("y")
+            if (!hasYear) {
+                localPattern = localPattern.replace("y", "").replace(",", "").trim()
+                date = date.withYear(DateTime().year)
+            }
+
+            var formattedString = date.toString(localPattern)
+            if (showYearsSince && hasYear) {
+                formattedString += " (${Years.yearsBetween(date, DateTime.now()).years})"
+            }
+
+            viewToUpdate?.text = formattedString
+            break
+        } catch (ignored: Exception) {
+        }
+    }
+    return date
 }
 
 // remove diacritics, for example č -> c

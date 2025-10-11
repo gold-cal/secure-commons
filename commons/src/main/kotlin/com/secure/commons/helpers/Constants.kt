@@ -122,7 +122,8 @@ const val INITIAL_WIDGET_HEIGHT = "initial_widget_height"
 const val WIDGET_ID_TO_MEASURE = "widget_id_to_measure"
 const val WAS_APP_ON_SD_SHOWN = "was_app_on_sd_shown"
 const val WAS_BEFORE_ASKING_SHOWN = "was_before_asking_shown"
-const val APP_SIDELOADING_STATUS = "app_sideloading_status"
+const val APP_RUN_COUNT = "app_run_count"
+//const val APP_SIDELOADING_STATUS = "app_sideloading_status"
 const val DATE_FORMAT = "date_format"
 const val WAS_OTG_HANDLED = "was_otg_handled_2"
 const val WAS_SORTING_BY_NUMERIC_VALUE_ADDED = "was_sorting_by_numeric_value_added"
@@ -139,6 +140,24 @@ const val START_NAME_WITH_SURNAME = "start_name_with_surname"
 const val FAVORITES = "favorites"
 const val SHOW_CALL_CONFIRMATION = "show_call_confirmation"
 const val COLOR_PICKER_RECENT_COLORS = "color_picker_recent_colors"
+
+// phone number/email types
+const val CELL = "CELL"
+const val WORK = "WORK"
+const val HOME = "HOME"
+const val OTHER = "OTHER"
+const val PREF = "PREF"
+const val MAIN = "MAIN"
+const val FAX = "FAX"
+const val WORK_FAX = "WORK;FAX"
+const val HOME_FAX = "HOME;FAX"
+const val PAGER = "PAGER"
+const val MOBILE = "MOBILE"
+
+// IMs not supported by Ez-vcard
+const val HANGOUTS = "Hangouts"
+const val QQ = "QQ"
+const val JABBER = "Jabber"
 
 // licenses
 internal const val LICENSE_KOTLIN = 1L
@@ -266,9 +285,9 @@ const val EVERY_DAY_BIT = MONDAY_BIT or TUESDAY_BIT or WEDNESDAY_BIT or THURSDAY
 const val WEEK_DAYS_BIT = MONDAY_BIT or TUESDAY_BIT or WEDNESDAY_BIT or THURSDAY_BIT or FRIDAY_BIT
 const val WEEKENDS_BIT = SATURDAY_BIT or SUNDAY_BIT
 
-const val SIDELOADING_UNCHECKED = 0
-const val SIDELOADING_TRUE = 1
-const val SIDELOADING_FALSE = 2
+//const val SIDELOADING_UNCHECKED = 0
+//const val SIDELOADING_TRUE = 1
+//const val SIDELOADING_FALSE = 2
 
 // default tabs
 const val TAB_LAST_USED = 0

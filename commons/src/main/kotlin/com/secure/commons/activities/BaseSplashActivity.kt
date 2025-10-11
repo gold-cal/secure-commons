@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.secure.commons.R
 import com.secure.commons.extensions.*
 import com.secure.commons.helpers.CrashHandler
-import com.secure.commons.helpers.SIDELOADING_TRUE
-import com.secure.commons.helpers.SIDELOADING_UNCHECKED
 
 @SuppressLint("CustomSplashScreen")
 abstract class BaseSplashActivity : AppCompatActivity() {
@@ -18,14 +16,14 @@ abstract class BaseSplashActivity : AppCompatActivity() {
 
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
 
-        if (baseConfig.appSideloadingStatus == SIDELOADING_UNCHECKED) {
+        /*if (baseConfig.appSideloadingStatus == SIDELOADING_UNCHECKED) {
             if (checkAppSideloading()) {
                 return
             }
         } else if (baseConfig.appSideloadingStatus == SIDELOADING_TRUE) {
             //showSideloadingDialog()
             return
-        }
+        }*/
 
         baseConfig.apply {
             if (isUsingAutoTheme) {

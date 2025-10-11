@@ -2,6 +2,7 @@ package com.secure.commons.extensions
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.text.format.Time
 import com.secure.commons.helpers.DARK_GREY
 import java.util.*
 
@@ -18,6 +19,16 @@ fun Int.adjustAlpha(factor: Float): Int {
     val green = Color.green(this)
     val blue = Color.blue(this)
     return Color.argb(alpha, red, green, blue)
+}
+
+fun Int.isThisYear(): Boolean {
+    val time = Time()
+    time.set(this * 1000L)
+
+    val thenYear = time.year
+    time.set(System.currentTimeMillis())
+
+    return (thenYear == time.year)
 }
 
 fun Int.addBitIf(add: Boolean, bit: Int) =
