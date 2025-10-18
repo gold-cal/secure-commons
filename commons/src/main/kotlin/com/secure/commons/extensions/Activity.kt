@@ -48,6 +48,7 @@ fun Activity.appLaunched(appId: String) {
     baseConfig.internalStoragePath = getInternalStoragePath()
     updateSDCardPath()
     baseConfig.appId = appId
+    baseConfig.appRunCount++
 }
 
 fun Activity.isAppInstalledOnSDCard(): Boolean = try {

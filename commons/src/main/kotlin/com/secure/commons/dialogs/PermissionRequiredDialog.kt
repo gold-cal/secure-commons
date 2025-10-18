@@ -14,7 +14,6 @@ class PermissionRequiredDialog(val activity: Activity, textId: Int, positiveActi
 
     init {
         val binding = DialogMessageBinding.inflate(activity.layoutInflater)
-            //activity.layoutInflater.inflate(R.layout.dialog_message, null)
         binding.message.text = activity.getString(textId)
 
         activity.getAlertDialogBuilder()
