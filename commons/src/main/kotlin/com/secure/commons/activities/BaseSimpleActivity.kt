@@ -624,10 +624,19 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         startCustomizationActivity()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    // @RequiresApi(Build.VERSION_CODES.O)
+    // https://stackoverflow.com/questions/32366649/any-way-to-link-to-the-android-notification-settings-for-my-app
     fun launchCustomizeNotificationsIntent() {
-        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        Intent().apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName);
+            } else {
+                setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                putExtra("app_package", packageName);
+                putExtra("app_uid", applicationInfo.uid);
+            }
+
             startActivity(this)
         }
     }

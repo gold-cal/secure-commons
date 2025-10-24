@@ -12,6 +12,7 @@ import com.secure.commons.extensions.viewBinding
 import com.secure.commons.helpers.*
 import java.util.*
 
+// TODO: fix this view so it auto-generates the radio buttons
 class ChangeDateTimeFormatDialog(val activity: Activity, val callback: () -> Unit) {
     private val binding by activity.viewBinding(DialogChangeDateTimeFormatBinding::inflate)
     //private val view = activity.layoutInflater.inflate(R.layout.dialog_change_date_time_format, null)!!
@@ -27,6 +28,7 @@ class ChangeDateTimeFormatDialog(val activity: Activity, val callback: () -> Uni
             changeDateTimeDialogRadioSix.text = formatDateSample(DATE_FORMAT_SIX)
             changeDateTimeDialogRadioSeven.text = formatDateSample(DATE_FORMAT_SEVEN)
             changeDateTimeDialogRadioEight.text = formatDateSample(DATE_FORMAT_EIGHT)
+            changeDateTimeDialogRadioFifteen.text = formatDateSample(DATE_FORMAT_FIFTEEN)
 
             changeDateTimeDialog24Hour.isChecked = activity.baseConfig.use24HourFormat
 
@@ -38,7 +40,8 @@ class ChangeDateTimeFormatDialog(val activity: Activity, val callback: () -> Uni
                 DATE_FORMAT_FIVE -> changeDateTimeDialogRadioFive
                 DATE_FORMAT_SIX -> changeDateTimeDialogRadioSix
                 DATE_FORMAT_SEVEN -> changeDateTimeDialogRadioSeven
-                else -> changeDateTimeDialogRadioEight
+                DATE_FORMAT_EIGHT -> changeDateTimeDialogRadioEight
+                else -> changeDateTimeDialogRadioFifteen
             }
             formatButton.isChecked = true
         }
@@ -60,7 +63,8 @@ class ChangeDateTimeFormatDialog(val activity: Activity, val callback: () -> Uni
             change_date_time_dialog_radio_five -> DATE_FORMAT_FIVE
             change_date_time_dialog_radio_six -> DATE_FORMAT_SIX
             change_date_time_dialog_radio_seven -> DATE_FORMAT_SEVEN
-            else -> DATE_FORMAT_EIGHT
+            change_date_time_dialog_radio_eight -> DATE_FORMAT_EIGHT
+            else -> DATE_FORMAT_FIFTEEN
         }
 
         activity.baseConfig.use24HourFormat = binding.changeDateTimeDialog24Hour.isChecked

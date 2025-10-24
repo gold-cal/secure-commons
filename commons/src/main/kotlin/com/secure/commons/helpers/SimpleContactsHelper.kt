@@ -28,6 +28,7 @@ import com.secure.commons.R
 import com.secure.commons.extensions.*
 import com.secure.commons.models.PhoneNumber
 import com.secure.commons.models.SimpleContact
+import kotlin.math.abs
 
 class SimpleContactsHelper(val context: Context) {
     fun getAvailableContacts(favoritesOnly: Boolean, callback: (ArrayList<SimpleContact>) -> Unit) {
@@ -273,8 +274,8 @@ class SimpleContactsHelper(val context: Context) {
         return ""
     }
 
-    fun loadContactImage(path: String, imageView: ImageView, placeholderName: String, placeholderImage: Drawable? = null) {
-        val placeholder = placeholderImage ?: BitmapDrawable(context.resources, getContactLetterIcon(placeholderName))
+    fun loadContactImage(path: String, imageView: ImageView, placeholderName: String, placeholderImage: Drawable? = null, customColor: Int = 0) {
+        val placeholder = placeholderImage ?: BitmapDrawable(context.resources, getContactLetterIcon(placeholderName, customColor))
 
         val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -290,7 +291,7 @@ class SimpleContactsHelper(val context: Context) {
             .into(imageView)
     }
 
-    fun getContactLetterIcon(name: String): Bitmap {
+    fun getContactLetterIcon(name: String, customColor: Int = 0): Bitmap {
         val letter = name.getNameLetter()
         val size = context.resources.getDimension(R.dimen.normal_icon_size).toInt()
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
@@ -299,7 +300,8 @@ class SimpleContactsHelper(val context: Context) {
         view.layout(0, 0, size, size)
 
         val circlePaint = Paint().apply {
-            color = letterBackgroundColors[Math.abs(name.hashCode()) % letterBackgroundColors.size].toInt()
+            color = if (customColor != 0) customColor
+                else letterBackgroundColors[abs(name.hashCode()) % letterBackgroundColors.size].toInt()
             isAntiAlias = true
         }
 
@@ -320,10 +322,11 @@ class SimpleContactsHelper(val context: Context) {
         view.draw(canvas)
         return bitmap
     }
-
+    // TODO: going to phase this function out
+    @Deprecated("Will be removed for future double icon")
     fun getColoredGroupIcon(title: String): Drawable {
         val icon = context.resources.getDrawable(R.drawable.ic_group_circle_bg)
-        val bgColor = letterBackgroundColors[Math.abs(title.hashCode()) % letterBackgroundColors.size].toInt()
+        val bgColor = letterBackgroundColors[abs(title.hashCode()) % letterBackgroundColors.size].toInt()
         (icon as LayerDrawable).findDrawableByLayerId(R.id.attendee_circular_background).applyColorFilter(bgColor)
         return icon
     }
