@@ -67,11 +67,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/big_margin"
-                    android:text="@string/contributors_developers"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/contributors_development_icon" />
-
+                    <!-- android:text="@string/contributors_developers" -->
             </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 

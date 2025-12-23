@@ -22,12 +22,8 @@ class FAQActivity : BaseSimpleActivity() {
     private val binding by viewBinding(ActivityInfoBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        isMaterialActivity = true
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        updateMaterialActivityViews(binding.infoCoordinator, binding.infoHolder, useTransparentNavigation = true, useTopSearchMenu = false)
-        //setupMaterialScrollListener(binding.faqNestedScrollview, binding.faqToolbar)
 
         val textColor = getProperTextColor()
         val backgroundColor = getProperBackgroundColor()

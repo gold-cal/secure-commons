@@ -15,65 +15,57 @@ class LicenseActivity : BaseSimpleActivity() {
     override fun getAppLauncherName() = intent.getStringExtra(APP_LAUNCHER_NAME) ?: ""
 
     private val binding by viewBinding(ActivityInfoBinding::inflate)
+    private var isPrivacyPolicy = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        isMaterialActivity = true
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         updateTextColors(binding.infoHolder)
-
-        updateMaterialActivityViews(binding.infoCoordinator, binding.infoHolder, useTransparentNavigation = true, useTopSearchMenu = false)
-        //setupMaterialScrollListener(binding.licensesNestedScrollview, binding.licensesToolbar)
 
         val textColor = getProperTextColor()
         val backgroundColor = getProperBackgroundColor()
         val accentColor = getProperAccentColor()
 
-        //val inflater = LayoutInflater.from(this)
-        val licenses = initLicenses()
-        val licenseMask = intent.getLongExtra(APP_LICENSES, 0) or LICENSE_KOTLIN
-        licenses.filter { licenseMask and it.id != 0L }.forEach { license ->
-            val itemLicense = ItemCardBinding.inflate(layoutInflater).apply {
-                itemCard.setCardBackgroundColor(backgroundColor)
-                itemLayout.background = AppCompatResources.getDrawable(applicationContext, R.drawable.section_holder_stroke)
-                itemTitle.apply {
-                    text = getString(license.titleId)
-                    setTextColor(accentColor)
-                    setOnClickListener {
-                        launchViewIntent(license.urlId)
-                    }
-                }
+        isPrivacyPolicy = intent.getBooleanExtra(APP_PRIVACY, false)
 
-                itemText.apply {
-                    text = getString(license.textId)
-                    setTextColor(textColor)
-                }
+        if (isPrivacyPolicy) {
+            addItem(textColor, accentColor, backgroundColor, null, isPrivacy = true)
+        } else {
+            val licenses = initLicenses()
+            val licenseMask = intent.getLongExtra(APP_LICENSES, 0) or LICENSE_KOTLIN
+            licenses.filter { licenseMask and it.id != 0L }.forEach { license ->
+                addItem(textColor, accentColor, backgroundColor, license)
             }
-            /*inflater.inflate(R.layout.item_license, null).apply {
-                license_card.setCardBackgroundColor(backgroundColor)
-                license_title.apply {
-                    text = getString(license.titleId)
-                    setTextColor(accentColor)
-                    setOnClickListener {
-                        launchViewIntent(license.urlId)
-                    }
-                }
-
-                license_text.apply {
-                    text = getString(license.textId)
-                    setTextColor(textColor)
-                }
-
-                licenses_holder.addView(this)
-            }*/
-            binding.infoHolder.addView(itemLicense.root)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        binding.infoToolbar.title = getString(R.string.third_party_licences)
+        binding.infoToolbar.title = if (isPrivacyPolicy) getString(R.string.privacy_policy)
+                                    else getString(R.string.third_party_licences)
         setupToolbar(binding.infoToolbar, NavigationIcon.Arrow)
+    }
+
+    private fun addItem(textColor: Int, accentColor: Int, backgroundColor: Int, license: License?, isPrivacy: Boolean = false) {
+        val itemLicense = ItemCardBinding.inflate(layoutInflater).apply {
+            itemCard.setCardBackgroundColor(backgroundColor)
+            itemLayout.background = AppCompatResources.getDrawable(applicationContext, R.drawable.section_holder_stroke)
+            itemTitle.apply {
+                text = if (isPrivacy) getString(R.string.privacy_policy) else getString(license!!.titleId)
+                setTextColor(accentColor)
+                if (!isPrivacy) {
+                    setOnClickListener {
+                        launchViewIntent(license!!.urlId)
+                    }
+                }
+            }
+
+            itemText.apply {
+                text = if (isPrivacy) getString(R.string.privacy_policy_statement) else getString(license!!.textId)
+                setTextColor(textColor)
+            }
+        }
+        binding.infoHolder.addView(itemLicense.root)
     }
 
     private fun initLicenses() = arrayOf(

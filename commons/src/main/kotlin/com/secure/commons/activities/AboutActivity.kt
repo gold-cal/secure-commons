@@ -1,6 +1,7 @@
 package com.secure.commons.activities
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData.Item
 import android.content.Intent
 import android.content.Intent.*
 import android.os.Build
@@ -23,6 +24,7 @@ class AboutActivity : BaseSimpleActivity() {
     private var textColor = 0
     private var backgroundColor = 0
     private var inflater: LayoutInflater? = null
+    private var isLightBackground = false
     private lateinit var faqItems: ArrayList<FAQItem>
 
     private val binding by viewBinding(ActivityAboutBinding::inflate)
@@ -32,7 +34,6 @@ class AboutActivity : BaseSimpleActivity() {
     override fun getAppLauncherName() = intent.getStringExtra(APP_LAUNCHER_NAME) ?: ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        isMaterialActivity = true
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
@@ -43,13 +44,20 @@ class AboutActivity : BaseSimpleActivity() {
         inflater = LayoutInflater.from(this)
         faqItems = intent.serializable<ArrayList<FAQItem>>(APP_FAQ)
 
-        updateMaterialActivityViews(binding.aboutCoordinator, binding.aboutHolder,
-            useTransparentNavigation = true, useTopSearchMenu = false)
+        isLightBackground = backgroundColor.or(0xFFFFFF00.toInt()).xor(0xFFFFFF00.toInt()) > 0x80
 
         appName = intent.getStringExtra(APP_NAME) ?: ""
 
         arrayOf(binding.aboutSupport, binding.aboutHelpUs, binding.aboutSocial, binding.aboutOther).forEach {
             it.setTextColor(accentColor)
+        }
+        if (isLightBackground) {
+            arrayOf(
+                binding.aboutSupportLayout, binding.aboutHelpUsLayout, binding.aboutSocialLayout,
+                binding.aboutOtherLayout
+            ).forEach {
+                it.background.applyColorFilter(DARK_GREY)
+            }
         }
         binding.aboutHelpUs.beGone()
     }
@@ -64,6 +72,8 @@ class AboutActivity : BaseSimpleActivity() {
         val urls = intent.getStringArrayListExtra(ABOUT_ITEMS_URIS) as ArrayList<String>
         val showBugReport = showItems[0]
         val showNewFeature = showItems[1]
+        val showForkedUri = showItems[2]
+        val showCodeUri = showItems[3]
         val forkedUri = urls[0]
         val codeUri = urls[1]
 
@@ -73,13 +83,15 @@ class AboutActivity : BaseSimpleActivity() {
                 aboutSupportLayout.removeAllViews()
             } else {
                 aboutSupportLayout.beGone()
+                aboutSupport.beGone()
             }
             //aboutHelpUsLayout.removeAllViews()
             aboutHelpUsLayout.beGone()
-            if (forkedUri.isNotEmpty() || codeUri.isNotEmpty()) {
+            if ((forkedUri.isNotEmpty() || codeUri.isNotEmpty()) && (showForkedUri || showCodeUri) ) {
                 aboutSocialLayout.removeAllViews()
             } else {
                 aboutSocialLayout.beGone()
+                aboutSocial.beGone()
             }
             aboutOtherLayout.removeAllViews()
         }
@@ -87,9 +99,9 @@ class AboutActivity : BaseSimpleActivity() {
         setupFAQ()
         if (showBugReport) setupBugReport()
         if (showNewFeature) setupEmail()
-        if (forkedUri.isNotEmpty()) setupForkedFromGitHub(forkedUri)
-        if (codeUri.isNotEmpty()) setupSourceCode(codeUri)
-        //setupPrivacyPolicy()
+        if (showForkedUri) setupForkedFromGitHub(forkedUri)
+        if (showCodeUri) setupSourceCode(codeUri)
+        setupPrivacyPolicy()
         setupLicense()
         setupVersion()
     }
@@ -243,23 +255,19 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
-    // TODO: Need to update this
-    /*private fun setupPrivacyPolicy() {
-        if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            return
+    private fun setupPrivacyPolicy() {
+        val itemBinding = ItemAboutBinding.inflate(layoutInflater, null, false)
+        setupAboutItem(itemBinding, R.drawable.ic_unhide_vector, R.string.privacy_policy)
+        binding.aboutOtherLayout.addView(itemBinding.root)
+        itemBinding.root.setOnClickListener {
+            Intent(applicationContext, LicenseActivity::class.java).apply {
+                putExtra(APP_ICON_IDS, getAppIconIDs())
+                putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
+                putExtra(APP_PRIVACY, true)
+                startActivity(this)
+            }
         }
-
-        inflater?.inflate(R.layout.item_about, null)?.apply {
-            setupAboutItem(this, R.drawable.ic_unhide_vector, R.string.privacy_policy)
-            about_other_layout.addView(this)*/
-
-            /*setOnClickListener {
-                val appId = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro").removePrefix("com.liturgical.")
-                val url = "https://privacy/$appId.txt"
-                launchViewIntent(url)
-            }*/
-/*        }
-    }*/
+    }
 
     private fun setupLicense() {
         val itemBinding = ItemAboutBinding.inflate(layoutInflater, null, false)

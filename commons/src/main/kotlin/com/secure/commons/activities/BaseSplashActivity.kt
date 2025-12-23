@@ -16,19 +16,10 @@ abstract class BaseSplashActivity : AppCompatActivity() {
 
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
 
-        /*if (baseConfig.appSideloadingStatus == SIDELOADING_UNCHECKED) {
-            if (checkAppSideloading()) {
-                return
-            }
-        } else if (baseConfig.appSideloadingStatus == SIDELOADING_TRUE) {
-            //showSideloadingDialog()
-            return
-        }*/
-
         baseConfig.apply {
             if (isUsingAutoTheme) {
                 val isUsingSystemDarkTheme = isUsingSystemDarkTheme()
-                isUsingSharedTheme = false
+                //isUsingSharedTheme = false
                 textColor = resources.getColor(if (isUsingSystemDarkTheme) R.color.theme_dark_text_color else R.color.theme_light_text_color, null)
                 backgroundColor = resources.getColor(if (isUsingSystemDarkTheme) R.color.theme_dark_background_color else R.color.theme_light_background_color, null)
             }

@@ -14,6 +14,7 @@ const val EXTRA_SHOW_ADVANCED = "android.content.extra.SHOW_ADVANCED"
 
 const val APP_NAME = "app_name"
 const val APP_LICENSES = "app_licenses"
+const val APP_PRIVACY = "app_privacy_policy"
 const val APP_FAQ = "app_faq"
 const val APP_VERSION_NAME = "app_version_name"
 const val APP_ICON_IDS = "app_icon_ids"
@@ -58,6 +59,8 @@ const val YEAR_SECONDS = YEAR_MINUTES * 60
 // shared preferences
 const val PREFS_KEY = "Prefs"
 const val LAST_VERSION = "last_version"
+const val THEME_TYPE = "theme_type"
+const val ACTION_BAR_STYLE = "action_bar_style"
 const val SD_TREE_URI = "tree_uri_2"
 const val PRIMARY_ANDROID_DATA_TREE_URI = "primary_android_data_tree_uri_2"
 const val OTG_ANDROID_DATA_TREE_URI = "otg_android_data_tree__uri_2"
@@ -96,7 +99,7 @@ const val PROTECTED_FOLDER_TYPE = "protected_folder_type_"
 const val KEEP_LAST_MODIFIED = "keep_last_modified"
 const val USE_ENGLISH = "use_english"
 const val WAS_USE_ENGLISH_TOGGLED = "was_use_english_toggled"
-const val IS_USING_SHARED_THEME = "is_using_shared_theme"
+//const val IS_USING_SHARED_THEME = "is_using_shared_theme"
 const val IS_USING_AUTO_THEME = "is_using_auto_theme"
 const val IS_USING_SYSTEM_THEME = "is_using_system_theme"
 const val WAS_CUSTOM_THEME_SWITCH_DESCRIPTION_SHOWN = "was_custom_theme_switch_description_shown"
@@ -158,6 +161,11 @@ const val MOBILE = "MOBILE"
 const val HANGOUTS = "Hangouts"
 const val QQ = "QQ"
 const val JABBER = "Jabber"
+
+// Action bar Styles
+const val ACTION_BAR_DEFAULT = 1
+const val ACTION_BAR_FLAT = 2
+//const val ACTION_BAR_LEGACY = 3
 
 // licenses
 internal const val LICENSE_KOTLIN = 1L
@@ -269,8 +277,11 @@ const val CONFLICT_KEEP_BOTH = 4
 
 // font sizes
 const val FONT_SIZE_EXTRA_SMALL = 0
+const val FONT_SIZE_SMALLER = 5
 const val FONT_SIZE_SMALL = 1
+const val FONT_SIZE_NORMAL = 6
 const val FONT_SIZE_MEDIUM = 2
+const val FONT_SIZE_BIG = 7
 const val FONT_SIZE_LARGE = 3
 const val FONT_SIZE_EXTRA_LARGE = 4
 
@@ -352,30 +363,31 @@ fun ensureBackgroundThread(callback: () -> Unit) {
     }
 }
 
+/** @since N = API 24 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
 fun isNougatPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-
+/** @since N_MR1 = API 25 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N_MR1)
 fun isNougatMR1Plus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
-
+/** @since O = API 26 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 fun isOreoPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
+/** @since O_MR1 = API 27 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O_MR1)
 fun isOreoMr1Plus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
-
+/** @since P = API 28 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.P)
 fun isPiePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-
+/** @since Q = API 29 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
 fun isQPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-
+/** @since R = API 30 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
 fun isRPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-
+/** @since S = API 31 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
 fun isSPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
+/** @since Tiramisu = API 33 **/
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
 fun isTiramisuPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 

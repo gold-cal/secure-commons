@@ -33,12 +33,21 @@ fun Context.getProperAccentColor() = if (baseConfig.isUsingSystemTheme) {
     baseConfig.accentColor
 }
 
-// get the color of the statusbar with material activity, if the layout is scrolled down a bit
-fun Context.getColoredMaterialStatusBarColor(): Int {
+// get the color of the statusbar with
+fun Context.getProperStatusBarColor(): Int {
     return if (baseConfig.isUsingSystemTheme) {
         resources.getColor(R.color.you_status_bar_color, theme)
-    } else {
+    } /*else if (isUsingLegacyToolbar()) {
         getProperPrimaryColor()
+    }*/ else {
+        getProperBackgroundColor()
+    }
+}
+
+fun Context.getProperActionBarColor(): Int {
+    return when (baseConfig.actionBarStyle) {
+        ACTION_BAR_FLAT -> getProperBackgroundColor()
+        else -> getProperPrimaryColor()
     }
 }
 
@@ -78,6 +87,8 @@ fun Context.isBlackAndWhiteTheme() = baseConfig.textColor == Color.WHITE && base
 fun Context.isWhiteTheme() = baseConfig.textColor == DARK_GREY && baseConfig.primaryColor == Color.WHITE && baseConfig.backgroundColor == Color.WHITE
 
 fun Context.isUsingSystemDarkTheme() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0
+
+//fun Context.isUsingLegacyToolbar() = baseConfig.actionBarStyle == ACTION_BAR_LEGACY
 
 fun Context.getTimePickerDialogTheme() = when {
     baseConfig.isUsingSystemTheme -> if (isUsingSystemDarkTheme()) {

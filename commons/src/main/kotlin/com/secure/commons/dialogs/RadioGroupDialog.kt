@@ -44,7 +44,7 @@ class RadioGroupDialog(
             .setOnCancelListener { cancelCallback?.invoke() }
 
         if (selectedItemId != -1 && showOKButton) {
-            builder.setPositiveButton(R.string.ok) { dialog, which -> itemSelected(selectedItemId) }
+            builder.setPositiveButton(R.string.ok) { _, _ -> itemSelected(selectedItemId) }
         }
 
         builder.apply {

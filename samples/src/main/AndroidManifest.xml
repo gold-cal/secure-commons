@@ -35,7 +35,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
-            android:name="com.secure.commons.activities.ManageBlockedNumbersActivity"
-            android:label="@string/blocked_numbers" />
+            android:name="com.secure.commons.activities.CustomizeActionBarActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 </manifest>

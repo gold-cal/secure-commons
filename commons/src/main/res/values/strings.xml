@@ -368,11 +368,16 @@
         ]]>
     </string>
 
+    <!-- Action Bar Customization -->
+    <string name="default_action_bar">Default Action Bar</string>
+    <string name="flat_action_bar">Flat Action Bar</string>
+    <string name="legacy_action_bar">Legacy Action Bar</string>
+
     <!-- Themes -->
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="auto_theme">Auto</string>
-    <string name="auto_light_dark_theme">Auto light / dark</string>
+    <string name="auto_light_dark_theme">Follow System</string>
     <string name="solarized">Solarized</string>
     <string name="dark_red">Dark red</string>
     <string name="white">White</string>
@@ -653,6 +658,7 @@
     <string name="purchase_simple_thank_you">Purchase Simple Thank You</string>
     <string name="general_settings">General</string>
     <string name="color_customization">Color customization</string>
+    <string name="action_bar_customization">Customize action bar style</string>
     <string name="improved_color_customization">Improved color customization</string>
     <string name="customize_colors">Customize colors</string>
     <string name="customize_colors_locked">Customize colors (Locked)</string>
@@ -664,7 +670,7 @@
     <string name="language">Language</string>
     <string name="show_hidden_items">Show hidden items</string>
     <string name="font_size">Font size</string>
-    <string name="extra_small">Extra Small</string>
+    <string name="extra_small">Extra small</string>
     <string name="small">Small</string>
     <string name="medium">Medium</string>
     <string name="large">Large</string>

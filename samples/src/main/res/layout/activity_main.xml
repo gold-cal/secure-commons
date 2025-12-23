@@ -5,19 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <RelativeLayout
+        android:id="@+id/toolbar_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_marginEnd="@dimen/medium_margin"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:background="@drawable/search_menu_background"
+            android:backgroundTint="?attr/colorPrimary"
+            app:titleTextColor="@color/hint_black"
+            app:title="@string/secure_commons" />
+
+    </RelativeLayout>
+    <!-- <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/color_primary"
         app:title="@string/secure_commons"
-        app:titleTextAppearance="@style/AppTheme.ActionBar.TitleTextStyle" />
+        app:titleTextAppearance="@style/AppTheme.ActionBar.TitleTextStyle" /> -->
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/main_nested_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="@dimen/toolbar_height"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -33,21 +51,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="About"
-                android:textColor="@color/hint_white"/>
+                android:textColor="@color/hint_black"/>
 
             <Button
                 android:id="@+id/main_color_customization"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/color_customization"
-                android:textColor="@color/hint_white"/>
+                android:textColor="@color/hint_black"/>
+
+            <Button
+                android:id="@+id/action_bar_customization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_bar_customization"
+                android:textColor="@color/hint_black"/>
 
             <Button
                 android:id="@+id/bottom_sheet_chooser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bottom sheet chooser"
-                android:textColor="@color/hint_white"/>
+                android:textColor="@color/hint_black"/>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

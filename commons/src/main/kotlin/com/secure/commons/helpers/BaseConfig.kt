@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class BaseConfig(val context: Context) {
-    protected val prefs = context.getSharedPrefs()
+    protected val prefs = context.getSharedPrefs()!!
 
     companion object {
         fun newInstance(context: Context) = BaseConfig(context)
@@ -23,6 +23,14 @@ open class BaseConfig(val context: Context) {
     var lastVersion: Int
         get() = prefs.getInt(LAST_VERSION, 0)
         set(lastVersion) = prefs.edit().putInt(LAST_VERSION, lastVersion).apply()
+
+    var themeType: String
+        get() = prefs.getString(THEME_TYPE, "null")!!
+        set(themeType) = prefs.edit().putString(THEME_TYPE, themeType).apply()
+
+    var actionBarStyle: Int
+        get() = prefs.getInt(ACTION_BAR_STYLE, 1)
+        set(actionBarStyle) = prefs.edit().putInt(ACTION_BAR_STYLE, actionBarStyle).apply()
 
     var primaryAndroidDataTreeUri: String
         get() = prefs.getString(PRIMARY_ANDROID_DATA_TREE_URI, "")!!
@@ -218,9 +226,9 @@ open class BaseConfig(val context: Context) {
         get() = prefs.getBoolean(WAS_SHARED_THEME_EVER_ACTIVATED, false)
         set(wasSharedThemeEverActivated) = prefs.edit().putBoolean(WAS_SHARED_THEME_EVER_ACTIVATED, wasSharedThemeEverActivated).apply()*/
 
-    var isUsingSharedTheme: Boolean
+    /*var isUsingSharedTheme: Boolean
         get() = prefs.getBoolean(IS_USING_SHARED_THEME, false)
-        set(isUsingSharedTheme) = prefs.edit().putBoolean(IS_USING_SHARED_THEME, isUsingSharedTheme).apply()
+        set(isUsingSharedTheme) = prefs.edit().putBoolean(IS_USING_SHARED_THEME, isUsingSharedTheme).apply()*/
 
     // used by Simple Thank You, stop using shared Shared Theme if it has been changed in it
     /*var shouldUseSharedTheme: Boolean
@@ -228,7 +236,7 @@ open class BaseConfig(val context: Context) {
         set(shouldUseSharedTheme) = prefs.edit().putBoolean(SHOULD_USE_SHARED_THEME, shouldUseSharedTheme).apply()*/
 
     var isUsingAutoTheme: Boolean
-        get() = prefs.getBoolean(IS_USING_AUTO_THEME, false)
+        get() = prefs.getBoolean(IS_USING_AUTO_THEME, true)
         set(isUsingAutoTheme) = prefs.edit().putBoolean(IS_USING_AUTO_THEME, isUsingAutoTheme).apply()
 
     var isUsingSystemTheme: Boolean

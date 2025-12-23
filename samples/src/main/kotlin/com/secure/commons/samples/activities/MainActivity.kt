@@ -8,6 +8,8 @@ import com.secure.commons.extensions.appLaunched
 import com.secure.commons.helpers.LICENSE_JODA
 import com.secure.commons.models.FAQItem
 import com.secure.commons.R.string
+import com.secure.commons.extensions.applyColorFilter
+import com.secure.commons.extensions.getProperPrimaryColor
 import com.secure.commons.models.AboutItems
 import com.secure.commons.samples.BuildConfig
 import com.secure.commons.samples.R
@@ -30,22 +32,22 @@ class MainActivity : BaseSimpleActivity() {
         setContentView(binding.root)
         appLaunched(BuildConfig.APPLICATION_ID)
 
-        updateMaterialActivityViews(binding.mainCoordinator, binding.mainHolder,
-            useTransparentNavigation = true, useTopSearchMenu = false)
-        //setupMaterialScrollListener(binding.mainNestedScrollview, binding.mainToolbar)
-
         binding.aboutActivity.setOnClickListener {
             val licenses = LICENSE_JODA
             val faqItems = arrayListOf(
                 FAQItem(string.faq_1_title_commons, string.faq_1_text_commons),
                 FAQItem(string.faq_4_title_commons, string.faq_4_text_commons)
             )
-            val showItems = AboutItems(false, false, "", "")
+            val showItems = AboutItems(false, false, "", false, "", false)
             startAboutActivity(R.string.smtco_app_name,licenses,BuildConfig.VERSION_NAME, faqItems,true, showItems)
         }
 
         binding.mainColorCustomization.setOnClickListener {
             startCustomizationActivity()
+        }
+
+        binding.actionBarCustomization.setOnClickListener {
+            startActionBarCustomization()
         }
 
         //startCustomizationActivity()

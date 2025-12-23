@@ -1,16 +1,11 @@
 package com.secure.commons.activities
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ActivityManager
 import android.app.RecoverableSecurityException
-import android.app.role.RoleManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -19,12 +14,10 @@ import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
-import android.telecom.TelecomManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -33,9 +26,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ScrollingView
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.updateLayoutParams
 import com.secure.commons.R
 import com.secure.commons.dialogs.*
 import com.secure.commons.dialogs.WritePermissionDialog.Mode
@@ -50,15 +41,12 @@ import java.io.OutputStream
 import java.util.regex.Pattern
 
 abstract class BaseSimpleActivity : AppCompatActivity() {
-    var materialScrollColorAnimation: ValueAnimator? = null
     var copyMoveCallback: ((destinationPath: String) -> Unit)? = null
     var actionOnPermission: ((granted: Boolean) -> Unit)? = null
     var isAskingPermissions = false
     var useDynamicTheme = true
     var showTransparentTop = false
-    var isMaterialActivity = false      // by material activity we mean translucent navigation bar and opaque status and action bars
     var checkedDocumentPath = ""
-    var currentScrollY = 0
     var configItemsToExport = LinkedHashMap<String, Any>()
 
     private var mainCoordinatorLayout: CoordinatorLayout? = null
@@ -96,38 +84,23 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     @SuppressLint("NewApi")
     override fun onResume() {
         super.onResume()
+        val bgColor = getProperBackgroundColor()
         if (useDynamicTheme) {
             setTheme(getThemeId(showTransparentTop = showTransparentTop))
-
-            val backgroundColor = if (baseConfig.isUsingSystemTheme) {
-                resources.getColor(R.color.you_background_color, theme)
-            } else {
-                baseConfig.backgroundColor
-            }
-
-            updateBackgroundColor(backgroundColor)
+            updateBackgroundColor(bgColor)
         }
 
         if (showTransparentTop) {
             window.statusBarColor = Color.TRANSPARENT
-        } else if (!isMaterialActivity) {
-            val color = if (baseConfig.isUsingSystemTheme) {
-                resources.getColor(R.color.you_status_bar_color, null)
-            } else {
-                getProperBackgroundColor()
-            }
-
-            updateActionbarColor(color)
+        } else {
+            updateStatusbarColor()
         }
 
-        //updateRecentsAppIcon()
-
-        var navBarColor = getProperBackgroundColor()
-        if (isMaterialActivity) {
+        /*if (isMaterialActivity) {
             navBarColor = navBarColor.adjustAlpha(HIGHER_ALPHA)
-        }
+        }*/
 
-        updateNavigationBarColor(navBarColor)
+        updateNavigationBarColor(bgColor)
     }
 
     override fun onDestroy() {
@@ -136,10 +109,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         actionOnPermission = null
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
+    /*override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        handleNavigationAndScrolling()
-    }
+        //handleNavigationAndScrolling()
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -164,20 +137,28 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         window.decorView.setBackgroundColor(color)
     }
 
-    fun updateStatusbarColor(color: Int) {
-        window.statusBarColor = color
+    fun updateStatusbarColor(color: Int? = null) {
+        val setColor = color ?: getProperStatusBarColor()
+        window.statusBarColor = setColor
 
-        if (color.getContrastColor() == DARK_GREY) {
+        if (setColor.getContrastColor() == DARK_GREY) {
             window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         } else {
             window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         }
     }
 
-    fun updateActionbarColor(color: Int = getProperBackgroundColor()) {
-        updateStatusbarColor(color)
-        setTaskDescription(ActivityManager.TaskDescription(null, null, color))
-    }
+    /*fun updateActionbarColor(style: Int? = null) {
+        var statusBarColor = getProperStatusBarColor()
+        var actionBarColor = getProperBackgroundColor()
+        if (style != null) {
+            when (style) {
+                ACTION_BAR_LEGACY ->
+            }
+        }
+        updateStatusbarColor(statusBarColor)
+        setTaskDescription(ActivityManager.TaskDescription(null, null, actionBarColor))
+    }*/
 
     fun updateNavigationBarColor(color: Int) {
         window.navigationBarColor = color
@@ -195,7 +176,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     // use translucent navigation bar, set the background color to action and status bars
-    fun updateMaterialActivityViews(
+    /*fun updateMaterialActivityViews(
         mainCoordinatorLayout: CoordinatorLayout?,
         nestedView: View?,
         useTransparentNavigation: Boolean,
@@ -205,14 +186,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         this.nestedView = nestedView
         this.useTransparentNavigation = useTransparentNavigation
         this.useTopSearchMenu = useTopSearchMenu
-        handleNavigationAndScrolling()
+        //handleNavigationAndScrolling()
 
         val actionBarColor = getColoredMaterialStatusBarColor()
         updateStatusbarColor(actionBarColor)
         updateActionbarColor(actionBarColor)
-    }
+    } */
 
-    private fun handleNavigationAndScrolling() {
+    /*private fun handleNavigationAndScrolling() {
         if (useTransparentNavigation) {
             if (navigationBarHeight > 0 || isUsingGestureNavigation()) {
                 window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
@@ -226,14 +207,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 updateTopBottomInsets(0, 0)
             }
         }
-    }
+    } */
 
-    private fun updateTopBottomInsets(statusBarHeight: Int, navigationBarHeight: Int) {
+    /*private fun updateTopBottomInsets(statusBarHeight: Int, navigationBarHeight: Int) {
         nestedView?.run {
             setPadding(paddingLeft, paddingTop, paddingRight, navigationBarHeight)
         }
         (mainCoordinatorLayout?.layoutParams as? FrameLayout.LayoutParams)?.topMargin = statusBarHeight
-    }
+    }*/
 
     // colorize the top toolbar and statusbar at scrolling down a bit
     /*fun setupMaterialScrollListener(scrollingView: ScrollingView?, toolbar: Toolbar) {
@@ -264,7 +245,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }*/
 
-    fun animateTopBarColors(colorFrom: Int, colorTo: Int) {
+    /*fun animateTopBarColors(colorFrom: Int, colorTo: Int) {
         if (toolbar == null) {
             return
         }
@@ -279,37 +260,37 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
 
         materialScrollColorAnimation!!.start()
-    }
+    }*/
 
-    fun getRequiredStatusBarColor(): Int {
+    /*fun getRequiredStatusBarColor(): Int {
         return if ((scrollingView is RecyclerView || scrollingView is NestedScrollView) && scrollingView?.computeVerticalScrollOffset() == 0) {
             getProperPrimaryColor()
         } else {
             getColoredMaterialStatusBarColor()
         }
-    }
+    }*/
 
-    fun updateTopBarColors(toolbar: Toolbar, color: Int) {
-        val contrastColor = if (useTopSearchMenu) {
-            getProperPrimaryColor().getContrastColor()
-        } else {
-            color.getContrastColor()
+    fun updateTopBarColors(toolbar: Toolbar, style: Int? = null, pColor: Int? = null, bColor: Int? = null) {
+        val setStyle = style ?: baseConfig.actionBarStyle
+        val bgColor = bColor ?: getProperBackgroundColor()
+        val primaryColor = pColor ?: getProperPrimaryColor()
+        var actionBarColor = primaryColor
+        val contrastColor = when (setStyle) {
+            ACTION_BAR_FLAT -> {
+                actionBarColor = bgColor
+                bgColor.getContrastColor()
+            }
+            /*ACTION_BAR_LEGACY -> {
+                bgColor = primaryColor
+                bgColor.getContrastColor()}*/
+            else -> primaryColor.getContrastColor()
         }
-        //val isBackgroundColor = color == getProperPrimaryColor()
+        updateStatusbarColor(bgColor)
 
-        if (!useTopSearchMenu) {
-            //if (isBackgroundColor) {
-                updateStatusbarColor(getProperBackgroundColor())
-                toolbar.background.applyColorFilter(color)
-            /*} else {
-                updateStatusbarColor(color)
-                toolbar.setBackgroundColor(color)
-            }*/
-            toolbar.setTitleTextColor(contrastColor)
-            toolbar.navigationIcon?.applyColorFilter(contrastColor)
-            toolbar.collapseIcon = resources.getColoredDrawableWithColor(R.drawable.ic_arrow_left_vector, contrastColor)
-        }
-
+        toolbar.background.applyColorFilter(actionBarColor)
+        toolbar.setTitleTextColor(contrastColor)
+        toolbar.navigationIcon?.applyColorFilter(contrastColor)
+        toolbar.collapseIcon = resources.getColoredDrawableWithColor(R.drawable.ic_arrow_left_vector, contrastColor)
         toolbar.overflowIcon = resources.getColoredDrawableWithColor(R.drawable.ic_three_dots_vector, contrastColor)
 
         val menu = toolbar.menu
@@ -321,7 +302,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    fun updateStatusBarOnPageChange() {
+    /*fun updateStatusBarOnPageChange() {
         if (scrollingView is RecyclerView || scrollingView is NestedScrollView) {
             val scrollY = scrollingView!!.computeVerticalScrollOffset()
             val colorFrom = window.statusBarColor
@@ -333,26 +314,30 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             animateTopBarColors(colorFrom, colorTo)
             currentScrollY = scrollY
         }
-    }
+    }*/
 
     fun setupToolbar(
         toolbar: Toolbar,
         toolbarNavigationIcon: NavigationIcon = NavigationIcon.None,
-        statusBarColor: Int = getProperPrimaryColor(), // getRequiredStatusBarColor(),
-        searchMenuItem: MenuItem? = null
+        style: Int? = null,
+        searchMenuItem: MenuItem? = null,
+        primaryColor: Int? = null,
+        bgColor: Int? = null
     ) {
+        val statusBarColor = getProperActionBarColor()
+
         val contrastColor = statusBarColor.getContrastColor()
         if (toolbarNavigationIcon != NavigationIcon.None) {
             val drawableId = if (toolbarNavigationIcon == NavigationIcon.Cross) R.drawable.ic_cross_vector else R.drawable.ic_arrow_left_vector
             toolbar.navigationIcon = resources.getColoredDrawableWithColor(drawableId, contrastColor)
         }
 
+        updateTopBarColors(toolbar, style, primaryColor, bgColor)
+
         toolbar.setNavigationOnClickListener {
             hideKeyboard()
             finish()
         }
-
-        updateTopBarColors(toolbar, statusBarColor)
 
         if (!useTopSearchMenu) {
             searchMenuItem?.actionView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)?.apply {
@@ -394,10 +379,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    fun setTranslucentNavigation() {
+    /*fun setTranslucentNavigation() {
         window.navigationBarColor = getColor(R.color.divider_transparent)
         //window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-    }
+    }*/
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
@@ -587,13 +572,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: make this so that the items in the about activity can be turned on or off
     fun startAboutActivity(appNameId: Int, licenseMask: Long, versionName: String, faqItems: ArrayList<FAQItem>, showFAQBeforeMail: Boolean,
                            aboutItems: AboutItems) {
-        val showItems = BooleanArray(2)
+        val showItems = BooleanArray(4)
         val urls = ArrayList<String>()
         showItems[0] = aboutItems.showBugReport
         showItems[1] = aboutItems.showNewFeature
+        showItems[2] = aboutItems.showForkedUrl
+        showItems[3] = aboutItems.showCodeUrl
         urls.add(aboutItems.forkedUrl)
         urls.add(aboutItems.codeUrl)
 
@@ -614,6 +600,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     fun startCustomizationActivity() {
         Intent(applicationContext, CustomizationActivity::class.java).apply {
+            putExtra(APP_ICON_IDS, getAppIconIDs())
+            putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
+            startActivity(this)
+        }
+    }
+
+    fun startActionBarCustomization() {
+        Intent(applicationContext, CustomizeActionBarActivity::class.java).apply {
             putExtra(APP_ICON_IDS, getAppIconIDs())
             putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
             startActivity(this)
@@ -970,7 +964,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         return "$appName-settings_${getCurrentFormattedDateTime()}"
     }
 
-    @SuppressLint("InlinedApi")
+    /*@SuppressLint("InlinedApi")
     protected fun launchSetDefaultDialerIntent() {
         if (isQPlus()) {
             val roleManager = getSystemService(RoleManager::class.java)
@@ -989,14 +983,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+    }*/
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    /*@RequiresApi(Build.VERSION_CODES.Q)
     fun setDefaultCallerIdApp() {
         val roleManager = getSystemService(RoleManager::class.java)
         if (roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING) && !roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
             startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_CALLER_ID)
         }
-    }
+    }*/
 }
