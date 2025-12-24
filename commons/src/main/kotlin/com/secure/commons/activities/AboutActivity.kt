@@ -44,7 +44,7 @@ class AboutActivity : BaseSimpleActivity() {
         inflater = LayoutInflater.from(this)
         faqItems = intent.serializable<ArrayList<FAQItem>>(APP_FAQ)
 
-        isLightBackground = backgroundColor.or(0xFFFFFF00.toInt()).xor(0xFFFFFF00.toInt()) > 0x80
+        isLightBackground = isLightBackground()
 
         appName = intent.getStringExtra(APP_NAME) ?: ""
 

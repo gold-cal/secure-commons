@@ -17,6 +17,7 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
         baseConfig.primaryColor.getContrastColor() == Color.WHITE -> R.style.AppTheme_White_LightTextColor
         else -> R.style.AppTheme_White
     }
+    isLightBackground() -> R.style.AppTheme_LightStyle
     showTransparentTop -> {
         when (color) {
             -12846 -> R.style.AppTheme_Red_100_core
@@ -209,7 +210,7 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
             -12434878 -> R.style.AppTheme_Grey_800_core
             -16777216 -> R.style.AppTheme_Grey_900_core
 
-            else -> R.style.AppTheme_Orange_700_core
+            else -> R.style.AppTheme_Indigo_700_core
         }
     }
     else -> {
@@ -404,7 +405,7 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
             -12434878 -> R.style.AppTheme_Grey_800
             -16777216 -> R.style.AppTheme_Grey_900
 
-            else -> R.style.AppTheme_Orange_700
+            else -> R.style.AppTheme_Indigo_700
         }
     }
 }

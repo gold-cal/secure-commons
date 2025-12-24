@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/debug_log_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/debug_log_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:layout_marginEnd="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:background="@drawable/search_menu_background"
+            android:backgroundTint="?attr/colorPrimary"
+            app:title="Debug Info"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/debug_log_toolbar">
+
+            <LinearLayout
+                android:id="@+id/debug_log_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:orientation="vertical"/>
+
+        </ScrollView>
+    </RelativeLayout>
+
+    <!-- <Button
+        android:id="@+id/close_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close app"
+        android:layout_marginBottom="50dp"
+        android:textColor="@color/default_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/> -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

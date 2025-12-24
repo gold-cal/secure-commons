@@ -21,7 +21,7 @@
     <string name="source_code">Source Code</string>
 
     <!-- Privacy Policy -->
-    <string name="privacy_policy_statement">This app does NOT share any of your personal information. All personal data that is used is stored locally on your device.\n\nThis app takes privacy seriously to help keep you save while using the app.</string>
+    <string name="privacy_policy_statement">This app does NOT share any of your personal information. All personal data that is used is stored locally on your device.\n\nThis app takes privacy seriously to help keep you safe while using the app.</string>
 
     <!-- License -->
     <string name="kotlin_text">Copyright 2010 &#8211; 2018 JetBrains s.r.o.\n\nLicensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.You may obtain a copy of the License at\n\nhttps://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.</string>

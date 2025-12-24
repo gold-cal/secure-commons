@@ -88,6 +88,8 @@ fun Context.isWhiteTheme() = baseConfig.textColor == DARK_GREY && baseConfig.pri
 
 fun Context.isUsingSystemDarkTheme() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0
 
+fun Context.isLightBackground() = getProperBackgroundColor().or(0xFFFFFF00.toInt()).xor(0xFFFFFF00.toInt()) > 0x80
+
 //fun Context.isUsingLegacyToolbar() = baseConfig.actionBarStyle == ACTION_BAR_LEGACY
 
 fun Context.getTimePickerDialogTheme() = when {
@@ -103,7 +105,7 @@ fun Context.getTimePickerDialogTheme() = when {
 fun Context.getPopupMenuTheme(): Int {
     return if (isSPlus() && baseConfig.isUsingSystemTheme) {
         R.style.AppTheme_YouPopupMenuStyle
-    } else if (isWhiteTheme()) {
+    } else if (isWhiteTheme() || baseConfig.themeType == "Light") {
         R.style.AppTheme_PopupMenuLightStyle
     } else {
         R.style.AppTheme_PopupMenuDarkStyle
