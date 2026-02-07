@@ -405,7 +405,7 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
             -12434878 -> R.style.AppTheme_Grey_800
             -16777216 -> R.style.AppTheme_Grey_900
 
-            else -> R.style.AppTheme_Indigo_700
+            else -> R.style.AppTheme_Indigo_800
         }
     }
 }

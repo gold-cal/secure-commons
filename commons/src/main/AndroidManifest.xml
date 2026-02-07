@@ -40,16 +40,5 @@
             android:label="@string/third_party_licences"
             android:parentActivityName="com.secure.commons.activities.AboutActivity" />
 
-        <!-- From newer version:
-         android:name="com.secure.commons.receivers.SharedThemeReceiver" -->
-        <!-- <receiver
-            android:name=".receivers.SharedThemeReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.secure.commons.SHARED_THEME_ACTIVATED" />
-                <action android:name="com.secure.commons.SHARED_THEME_UPDATED" />
-            </intent-filter>
-        </receiver> -->
     </application>
 </manifest>

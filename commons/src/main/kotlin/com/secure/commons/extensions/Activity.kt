@@ -49,6 +49,8 @@ fun Activity.appLaunched(appId: String) {
     updateSDCardPath()
     baseConfig.appId = appId
     baseConfig.appRunCount++
+    if (baseConfig.appRunCount > 1000000000)
+        baseConfig.appRunCount = 5
 }
 
 fun Activity.isAppInstalledOnSDCard(): Boolean = try {

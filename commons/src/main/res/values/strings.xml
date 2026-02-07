@@ -383,6 +383,7 @@
     <string name="white">White</string>
     <string name="black_white">Black &amp; White</string>
     <string name="custom">Custom</string>
+    <string name="midnight">Midnight</string>
     <string name="shared">Shared</string>
     <string name="system_default">System default</string>
 
@@ -661,6 +662,7 @@
     <string name="action_bar_customization">Customize action bar style</string>
     <string name="improved_color_customization">Improved color customization</string>
     <string name="customize_colors">Customize colors</string>
+    <string name="customize_action_bar">Customize action bar</string>
     <string name="customize_colors_locked">Customize colors (Locked)</string>
     <string name="feature_locked">Locked</string>
     <string name="customize_widget_colors">Customize widget colors</string>

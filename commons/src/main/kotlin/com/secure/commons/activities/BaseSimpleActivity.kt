@@ -26,7 +26,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ScrollingView
-import androidx.core.view.updateLayoutParams
 import com.secure.commons.R
 import com.secure.commons.dialogs.*
 import com.secure.commons.dialogs.WritePermissionDialog.Mode
@@ -55,13 +54,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     private var toolbar: Toolbar? = null
     private var useTransparentNavigation = false
     private var useTopSearchMenu = false
-    private val GENERIC_PERM_HANDLER = 100
-    private val DELETE_FILE_SDK_30_HANDLER = 300
-    private val RECOVERABLE_SECURITY_HANDLER = 301
-    private val UPDATE_FILE_SDK_30_HANDLER = 302
-    private val MANAGE_MEDIA_RC = 303
 
     companion object {
+        private const val GENERIC_PERM_HANDLER = 100
+        private const val DELETE_FILE_SDK_30_HANDLER = 300
+        private const val RECOVERABLE_SECURITY_HANDLER = 301
+        private const val UPDATE_FILE_SDK_30_HANDLER = 302
+        private const val MANAGE_MEDIA_RC = 303
+
         var funAfterSAFPermission: ((success: Boolean) -> Unit)? = null
         var funAfterSdk30Action: ((success: Boolean) -> Unit)? = null
         var funAfterUpdate30File: ((success: Boolean) -> Unit)? = null
@@ -289,6 +289,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
         toolbar.background.applyColorFilter(actionBarColor)
         toolbar.setTitleTextColor(contrastColor)
+        toolbar.setSubtitleTextColor(contrastColor)
         toolbar.navigationIcon?.applyColorFilter(contrastColor)
         toolbar.collapseIcon = resources.getColoredDrawableWithColor(R.drawable.ic_arrow_left_vector, contrastColor)
         toolbar.overflowIcon = resources.getColoredDrawableWithColor(R.drawable.ic_three_dots_vector, contrastColor)

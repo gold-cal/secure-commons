@@ -10,6 +10,7 @@ import com.secure.commons.models.FAQItem
 import com.secure.commons.R.string
 import com.secure.commons.extensions.applyColorFilter
 import com.secure.commons.extensions.getProperPrimaryColor
+import com.secure.commons.extensions.getProperTextColor
 import com.secure.commons.models.AboutItems
 import com.secure.commons.samples.BuildConfig
 import com.secure.commons.samples.R
@@ -82,6 +83,16 @@ class MainActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
+        val primary = getProperPrimaryColor()
+        val textColor = getProperTextColor()
         setupToolbar(binding.mainToolbar)
+        binding.aboutActivity.setBackgroundColor(primary)
+        binding.aboutActivity.setTextColor(textColor)
+        binding.mainColorCustomization.setBackgroundColor(primary)
+        binding.mainColorCustomization.setTextColor(textColor)
+        binding.actionBarCustomization.setBackgroundColor(primary)
+        binding.actionBarCustomization.setTextColor(textColor)
+        binding.bottomSheetChooser.setBackgroundColor(primary)
+        binding.bottomSheetChooser.setTextColor(textColor)
     }
 }

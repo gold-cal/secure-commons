@@ -14,16 +14,19 @@ import com.secure.commons.views.MyTextView
 import kotlin.math.abs
 
 class CustomizationActivity : BaseSimpleActivity() {
-    private val THEME_LIGHT = 0
-    private val THEME_DARK = 1
-    private val THEME_SOLARIZED = 2
-    private val THEME_DARK_RED = 3
-    private val THEME_BLACK_WHITE = 4
-    private val THEME_CUSTOM = 5
-    //private val THEME_SHARED = 6
-    private val THEME_WHITE = 7
-    private val THEME_AUTO = 8
-    private val THEME_SYSTEM = 9    // Material You
+
+    companion object {
+        private const val THEME_LIGHT = 0
+        private const val THEME_DARK = 1
+        private const val THEME_SOLARIZED = 2
+        private const val THEME_DARK_RED = 3
+        private const val THEME_BLACK_WHITE = 4
+        private const val THEME_CUSTOM = 5
+        private const val THEME_MIDNIGHT = 6
+        private const val THEME_WHITE = 7
+        private const val THEME_AUTO = 8
+        private const val THEME_SYSTEM = 9    // Material You
+    }
 
     private var curTextColor = 0
     private var curBackgroundColor = 0
@@ -33,7 +36,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private var lastSavePromptTS = 0L
     private var hasUnsavedChanges = false
     private var predefinedThemes = LinkedHashMap<Int, MyTheme>()
-    private var curPrimaryLineColorPicker: LineColorPickerDialog? = null
+    //private var curPrimaryLineColorPicker: LineColorPickerDialog? = null
 
     private val binding by viewBinding(ActivityCustomizationBinding::inflate)
 
@@ -68,10 +71,10 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateStatusbarColor(getCurrentStatusBarColor())
         }
 
-        curPrimaryLineColorPicker?.getSpecificColor()?.apply {
+        /*curPrimaryLineColorPicker?.getSpecificColor()?.apply {
             updateTopBarColors(binding.customizationToolbar, pColor = this)
             setTheme(getThemeId(this))
-        }
+        }*/
 
         setupToolbar(binding.customizationToolbar, NavigationIcon.Cross)
         binding.actionBarRadioGroup.beGone()
@@ -127,6 +130,16 @@ class CustomizationActivity : BaseSimpleActivity() {
                     R.color.theme_dark_background_color,
                     R.color.color_primary,
                     R.color.color_accent
+                )
+            )
+            put(
+                THEME_MIDNIGHT,
+                MyTheme(
+                    getString(R.string.midnight),
+                    R.color.theme_dark_text_color,
+                    R.color.theme_midnight_background_color,
+                    R.color.theme_midnight_primary_color,
+                    R.color.theme_midnight_accent_color
                 )
             )
             put(
@@ -269,7 +282,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         } else */
         if ((baseConfig.isUsingSystemTheme && !hasUnsavedChanges) || curSelectedThemeId == THEME_SYSTEM) {
             return THEME_SYSTEM
-        } else if (baseConfig.isUsingAutoTheme || curSelectedThemeId == THEME_AUTO) {
+        } else if ((baseConfig.isUsingAutoTheme && !hasUnsavedChanges) || curSelectedThemeId == THEME_AUTO) {
             return THEME_AUTO
         }
 
@@ -430,21 +443,30 @@ class CustomizationActivity : BaseSimpleActivity() {
                 if (hasColorChanged(curBackgroundColor, color)) {
                     setCurrentBackgroundColor(color)
                     colorChanged()
-                    updateColorTheme(getCurrentThemeId()) //getUpdatedTheme())
+                    updateColorTheme(getCurrentThemeId())
                 }
             }
         }
     }
 
     private fun pickPrimaryColor() {
-        curPrimaryLineColorPicker = LineColorPickerDialog(this, curPrimaryColor,
+        ColorPickerDialog(this, curPrimaryColor) { wasPositivePressed, color ->
+            if (wasPositivePressed) {
+                if (hasColorChanged(curPrimaryColor, color)) {
+                    setCurrentPrimaryColor(color)
+                    colorChanged()
+                    updateColorTheme(getCurrentThemeId())
+                }
+            }
+        }
+        /*curPrimaryLineColorPicker = LineColorPickerDialog(this, curPrimaryColor,
             true, toolbar = binding.customizationToolbar) { wasPositivePressed, color ->
             curPrimaryLineColorPicker = null
             if (wasPositivePressed) {
                 if (hasColorChanged(curPrimaryColor, color)) {
                     setCurrentPrimaryColor(color)
                     colorChanged()
-                    updateColorTheme(getCurrentThemeId()) //getUpdatedTheme())
+                    updateColorTheme(getCurrentThemeId())
                     setTheme(getThemeId(color))
                 }
                 updateMenuItemColors(binding.customizationToolbar.menu, color)
@@ -455,7 +477,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 setupToolbar(binding.customizationToolbar, NavigationIcon.Cross, primaryColor =  curPrimaryColor)
                 updateTopBarColors(binding.customizationToolbar, curPrimaryColor)
             }
-        }
+        }*/
     }
 
     private fun pickAccentColor() {
@@ -472,30 +494,6 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         }
     }
-
-    //private fun getUpdatedTheme() = if (curSelectedThemeId == THEME_SHARED) THEME_SHARED else getCurrentThemeId()
-
-    /*private fun applyToAll() {
-        if (isThankYouInstalled()) {
-            ConfirmationDialog(this, "", R.string.share_colors_success, R.string.ok, 0) {
-                Intent().apply {
-                    action = MyContentProvider.SHARED_THEME_ACTIVATED
-                    sendBroadcast(this)
-                }
-
-                if (!predefinedThemes.containsKey(THEME_SHARED)) {
-                    predefinedThemes[THEME_SHARED] = MyTheme(getString(R.string.shared), 0, 0, 0, 0)
-                }
-
-                baseConfig.wasSharedThemeEverActivated = true
-                apply_to_all_holder.beGone()
-                updateColorTheme(THEME_SHARED)
-                saveChanges(false)
-            }
-        } else {
-            PurchaseThankYouDialog(this)
-        }
-    }*/
 
     private fun updateLabelColors(textColor: Int) {
         arrayListOf<MyTextView>(
