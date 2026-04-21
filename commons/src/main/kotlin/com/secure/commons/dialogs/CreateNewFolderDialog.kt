@@ -12,7 +12,8 @@ import java.io.File
 class CreateNewFolderDialog(val activity: BaseSimpleActivity, val path: String, val callback: (path: String) -> Unit) {
     init {
         val binding = DialogCreateNewFolderBinding.inflate(activity.layoutInflater)
-        binding.folderPath.setText("${activity.humanizePath(path).trimEnd('/')}/")
+        val text = "${activity.humanizePath(path).trimEnd('/')}/"
+        binding.folderPath.setText(text)
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)

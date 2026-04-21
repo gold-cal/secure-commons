@@ -16,13 +16,13 @@ class ConfirmationAdvancedDialog(
 
     init {
         val binding = DialogMessageBinding.inflate(activity.layoutInflater)
-        binding.message.text = if (message.isEmpty()) activity.resources.getString(messageId) else message
+        binding.message.text = message.ifEmpty { activity.resources.getString(messageId) }
 
         val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(positive) { dialog, which -> positivePressed() }
+            .setPositiveButton(positive) { _, _ -> positivePressed() }
 
         if (negative != 0) {
-            builder.setNegativeButton(negative) { dialog, which -> negativePressed() }
+            builder.setNegativeButton(negative) { _, _ -> negativePressed() }
         }
 
         if (!cancelOnTouchOutside) {

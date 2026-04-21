@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,7 +20,7 @@ import com.secure.commons.models.RadioItem
 import com.secure.commons.views.MyCompatRadioButton
 
 class SelectAlarmSoundDialog(
-    val activity: BaseSimpleActivity, val currentUri: String, val audioStream: Int, val pickAudioIntentId: Int,
+    val activity: BaseSimpleActivity, val currentUri: String, val audioStream: Int, val pickAudioIntentId: ActivityResultLauncher<Intent>,
     val type: Int, val loopAudio: Boolean, val onAlarmPicked: (alarmSound: AlarmSound?) -> Unit,
     val onAlarmSoundDeleted: (alarmSound: AlarmSound) -> Unit
 ) {
@@ -45,7 +46,7 @@ class SelectAlarmSoundDialog(
 
         activity.getAlertDialogBuilder()
             .setOnDismissListener { mediaPlayer?.stop() }
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->
@@ -113,7 +114,7 @@ class SelectAlarmSoundDialog(
                 }
 
                 try {
-                    activity.startActivityForResult(intent, pickAudioIntentId)
+                    pickAudioIntentId.launch(intent)
                 } catch (e: ActivityNotFoundException) {
                     activity.toast(R.string.no_app_found)
                 }

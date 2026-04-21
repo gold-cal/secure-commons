@@ -1,7 +1,6 @@
 package com.secure.commons.activities
 
 import android.content.ActivityNotFoundException
-import android.content.ClipData.Item
 import android.content.Intent
 import android.content.Intent.*
 import android.os.Build

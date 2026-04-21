@@ -64,7 +64,7 @@ class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: ()
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setOnCancelListener {
                 BaseSimpleActivity.funAfterSAFPermission?.invoke(false)
                 BaseSimpleActivity.funAfterSAFPermission = null

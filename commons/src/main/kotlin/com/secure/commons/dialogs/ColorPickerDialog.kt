@@ -1,5 +1,6 @@
 package com.secure.commons.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import android.view.MotionEvent
@@ -20,6 +21,7 @@ import java.util.*
 private const val RECENT_COLORS_NUMBER = 5
 
 // forked from https://github.com/yukuku/ambilwarna
+@SuppressLint("ClickableViewAccessibility")
 class ColorPickerDialog(
     val activity: Activity,
     color: Int,
@@ -64,7 +66,8 @@ class ColorPickerDialog(
             colorPickerOldColor.setFillWithStroke(color, backgroundColor)
 
             val hexCode = getHexCode(color)
-            colorPickerOldHex.text = "#$hexCode"
+            val text = "#$hexCode"
+            colorPickerOldHex.text = text
             colorPickerOldHex.setOnLongClickListener {
                 activity.copyToClipboard(hexCode)
                 true
@@ -73,7 +76,7 @@ class ColorPickerDialog(
             setupRecentColors()
         }
 
-        viewHue.setOnTouchListener(OnTouchListener { v, event ->
+        viewHue.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 isHueBeingDragged = true
             }
@@ -102,7 +105,7 @@ class ColorPickerDialog(
             false
         })
 
-        viewSatVal.setOnTouchListener(OnTouchListener { v, event ->
+        viewSatVal.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_MOVE || event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
                 var x = event.x
                 var y = event.y
@@ -141,8 +144,8 @@ class ColorPickerDialog(
 
         val textColor = activity.getProperTextColor()
         val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> confirmNewColor() }
-            .setNegativeButton(R.string.cancel) { dialog, which -> dialogDismissed() }
+            .setPositiveButton(R.string.ok) { _, _ -> confirmNewColor() }
+            .setNegativeButton(R.string.cancel) { _, _ -> dialogDismissed() }
             .setOnCancelListener { dialogDismissed() }
 
         builder.apply {

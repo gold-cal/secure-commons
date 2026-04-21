@@ -74,7 +74,7 @@ class FilePickerDialog(
 
         val builder = activity.getAlertDialogBuilder()
             .setNegativeButton(R.string.cancel, null)
-            .setOnKeyListener { dialogInterface, i, keyEvent ->
+            .setOnKeyListener { _, i, keyEvent ->
                 if (keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                     val breadcrumbs = mDialogView.filepickerBreadcrumbs
                     if (breadcrumbs.getItemCount() > 1) {
@@ -117,7 +117,8 @@ class FilePickerDialog(
             }
         }
 
-        mDialogView.filepickerFavoritesLabel.text = "${activity.getString(R.string.favorites)}:"
+        val text = "${activity.getString(R.string.favorites)}:"
+        mDialogView.filepickerFavoritesLabel.text = text
         mDialogView.filepickerFabShowFavorites.apply {
             beVisibleIf(showFavoritesButton && context.baseConfig.favorites.isNotEmpty())
             setOnClickListener {

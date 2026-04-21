@@ -14,7 +14,7 @@ class FolderLockingNoticeDialog(val activity: Activity, val callback: () -> Unit
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(binding.root, this, R.string.disclaimer)

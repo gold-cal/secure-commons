@@ -2,7 +2,6 @@ package com.secure.commons.extensions
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.text.format.Time
 import com.secure.commons.helpers.DARK_GREY
 import java.util.*
 
@@ -22,13 +21,18 @@ fun Int.adjustAlpha(factor: Float): Int {
 }
 
 fun Int.isThisYear(): Boolean {
-    val time = Time()
-    time.set(this * 1000L)
+    val cal = GregorianCalendar()
+    cal.timeInMillis = (this * 1000L)
+    //val time = Time()
+    //time.set(this * 1000L)
 
-    val thenYear = time.year
-    time.set(System.currentTimeMillis())
+    val thenYear = cal.get(Calendar.YEAR)
+        //time.year
+    cal.timeInMillis = System.currentTimeMillis()
+    //time.set(System.currentTimeMillis())
+    val currYear = cal.get(Calendar.YEAR)
 
-    return (thenYear == time.year)
+    return (thenYear == currYear) // time.year)
 }
 
 fun Int.addBitIf(add: Boolean, bit: Int) =
@@ -46,32 +50,20 @@ fun Int.addBit(bit: Int) = this or bit
 fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
 
 // taken from https://stackoverflow.com/a/40964456/1967672
-fun Int.darkenColor(factor: Int = 8): Int {
+fun Int.darkenColor(factor: Int = 8) = adjustColor(factor, false)
+
+fun Int.lightenColor(factor: Int = 8) = adjustColor(factor, true)
+
+private fun Int.adjustColor(factor: Int, lighter: Boolean): Int {
     if (this == Color.WHITE || this == Color.BLACK) {
         return this
     }
 
-    val DARK_FACTOR = factor
     var hsv = FloatArray(3)
     Color.colorToHSV(this, hsv)
     val hsl = hsv2hsl(hsv)
-    hsl[2] -= DARK_FACTOR / 100f
-    if (hsl[2] < 0)
-        hsl[2] = 0f
-    hsv = hsl2hsv(hsl)
-    return Color.HSVToColor(hsv)
-}
-
-fun Int.lightenColor(factor: Int = 8): Int {
-    if (this == Color.WHITE || this == Color.BLACK) {
-        return this
-    }
-
-    val LIGHT_FACTOR = factor
-    var hsv = FloatArray(3)
-    Color.colorToHSV(this, hsv)
-    val hsl = hsv2hsl(hsv)
-    hsl[2] += LIGHT_FACTOR / 100f
+    if (lighter) hsl[2] += factor / 100f
+    else hsl[2] -= factor / 100f
     if (hsl[2] < 0)
         hsl[2] = 0f
     hsv = hsl2hsv(hsl)

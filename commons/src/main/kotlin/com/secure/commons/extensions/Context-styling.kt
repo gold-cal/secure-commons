@@ -33,7 +33,7 @@ fun Context.getProperAccentColor() = if (baseConfig.isUsingSystemTheme) {
     baseConfig.accentColor
 }
 
-// get the color of the statusbar with
+// get the color of the statusBar with
 fun Context.getProperStatusBarColor(): Int {
     return if (baseConfig.isUsingSystemTheme) {
         resources.getColor(R.color.you_status_bar_color, theme)

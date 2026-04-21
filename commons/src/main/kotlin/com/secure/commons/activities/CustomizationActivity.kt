@@ -3,6 +3,7 @@ package com.secure.commons.activities
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.secure.commons.R
 import com.secure.commons.databinding.ActivityCustomizationBinding
 import com.secure.commons.dialogs.*
@@ -10,7 +11,6 @@ import com.secure.commons.extensions.*
 import com.secure.commons.helpers.*
 import com.secure.commons.models.MyTheme
 import com.secure.commons.models.RadioItem
-import com.secure.commons.views.MyTextView
 import kotlin.math.abs
 
 class CustomizationActivity : BaseSimpleActivity() {
@@ -60,11 +60,19 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
 
         updateLabelColors(textColor)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (hasUnsavedChanges && System.currentTimeMillis() - lastSavePromptTS > SAVE_DISCARD_PROMPT_INTERVAL) {
+                    promptSaveDiscard()
+                }
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        setTheme(getThemeId(getCurrentPrimaryColor()))
+        setTheme(getThemeId()) // getCurrentPrimaryColor()
 
         if (!baseConfig.isUsingSystemTheme) {
             updateBackgroundColor(getCurrentBackgroundColor())
@@ -96,14 +104,14 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
+    //@Deprecated("Deprecated in Java") // Deprecated in api 33
+    /*override fun onBackPressed() {
         if (hasUnsavedChanges && System.currentTimeMillis() - lastSavePromptTS > SAVE_DISCARD_PROMPT_INTERVAL) {
             promptSaveDiscard()
         } else {
             super.onBackPressed()
         }
-    }
+    }*/
 
     private fun setupThemes() {
         predefinedThemes.apply {
@@ -222,7 +230,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     curBackgroundColor = baseConfig.customBackgroundColor
                     curPrimaryColor = baseConfig.customPrimaryColor
                     curAccentColor = baseConfig.customAccentColor
-                    setTheme(getThemeId(curPrimaryColor))
+                    setTheme(getThemeId()) // curPrimaryColor
                     updateMenuItemColors(binding.customizationToolbar.menu, curPrimaryColor)
                     setupToolbar(binding.customizationToolbar, NavigationIcon.Cross, primaryColor =  curPrimaryColor)
                     setupColorsPickers()
@@ -242,7 +250,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     curAccentColor = getColor(theme.accentColorId, null)
                 }
 
-                setTheme(getThemeId(getCurrentPrimaryColor()))
+                setTheme(getThemeId()) // getCurrentPrimaryColor()
                 colorChanged()
                 updateMenuItemColors(binding.customizationToolbar.menu)
                 setupToolbar(binding.customizationToolbar, NavigationIcon.Cross, primaryColor = curPrimaryColor, bgColor = curBackgroundColor)
@@ -496,7 +504,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun updateLabelColors(textColor: Int) {
-        arrayListOf<MyTextView>(
+        arrayListOf(
             binding.customizationThemeLabel,
             binding.customizationTheme,
             binding.customizationTextColorLabel,

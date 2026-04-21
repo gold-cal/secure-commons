@@ -1,6 +1,5 @@
 package com.secure.commons.dialogs
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
@@ -49,7 +48,6 @@ class StoragePickerDialog(
     }
 
     private fun initDialog() {
-        val inflater = LayoutInflater.from(activity)
         val resources = activity.resources
         val layoutParams = RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         val binding = DialogRadioGroupBinding.inflate(activity.layoutInflater)

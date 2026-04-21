@@ -17,7 +17,7 @@ class PermissionRequiredDialog(val activity: Activity, textId: Int, positiveActi
         binding.message.text = activity.getString(textId)
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.grant_permission) { dialog, which ->
+            .setPositiveButton(R.string.grant_permission) { _, _ ->
                 if (positiveActionCallback == 1) {
                     activity.openRequestExactAlarmSettings(id) // id = Application_id
                 } else {

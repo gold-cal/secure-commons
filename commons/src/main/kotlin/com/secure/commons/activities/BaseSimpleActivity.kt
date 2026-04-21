@@ -17,15 +17,20 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowInsetsController
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ScrollingView
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.secure.commons.R
 import com.secure.commons.dialogs.*
 import com.secure.commons.dialogs.WritePermissionDialog.Mode
@@ -57,10 +62,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     companion object {
         private const val GENERIC_PERM_HANDLER = 100
-        private const val DELETE_FILE_SDK_30_HANDLER = 300
-        private const val RECOVERABLE_SECURITY_HANDLER = 301
-        private const val UPDATE_FILE_SDK_30_HANDLER = 302
-        private const val MANAGE_MEDIA_RC = 303
+        //private const val DELETE_FILE_SDK_30_HANDLER = 300
+        //private const val RECOVERABLE_SECURITY_HANDLER = 301
+        //private const val UPDATE_FILE_SDK_30_HANDLER = 302
+        //private const val MANAGE_MEDIA_RC = 303
 
         var funAfterSAFPermission: ((success: Boolean) -> Unit)? = null
         var funAfterSdk30Action: ((success: Boolean) -> Unit)? = null
@@ -93,7 +98,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         if (showTransparentTop) {
             window.statusBarColor = Color.TRANSPARENT
         } else {
-            updateStatusbarColor()
+            updateStatusBarColor()
         }
 
         /*if (isMaterialActivity) {
@@ -137,14 +142,20 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         window.decorView.setBackgroundColor(color)
     }
 
-    fun updateStatusbarColor(color: Int? = null) {
+    fun updateStatusBarColor(color: Int? = null) {
         val setColor = color ?: getProperStatusBarColor()
         window.statusBarColor = setColor
 
         if (setColor.getContrastColor() == DARK_GREY) {
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            WindowInsetsControllerCompat(window, window.decorView).apply {
+                isAppearanceLightStatusBars = true // use dark status bar icons
+            }
+            //window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         } else {
-            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            WindowInsetsControllerCompat(window, window.decorView).apply {
+                isAppearanceLightStatusBars = false
+            }
+            //window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         }
     }
 
@@ -156,7 +167,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 ACTION_BAR_LEGACY ->
             }
         }
-        updateStatusbarColor(statusBarColor)
+        updateStatusBarColor(statusBarColor)
         setTaskDescription(ActivityManager.TaskDescription(null, null, actionBarColor))
     }*/
 
@@ -165,12 +176,19 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         updateNavigationBarButtons(color)
     }
 
+    // items deprecated in api 30
     fun updateNavigationBarButtons(color: Int) {
         if (isOreoPlus()) {
             if (color.getContrastColor() == DARK_GREY) {
-                window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                WindowInsetsControllerCompat(window, window.decorView).apply {
+                    isAppearanceLightNavigationBars = true // set light navigation bar
+                }
+                //window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
             } else {
-                window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                WindowInsetsControllerCompat(window, window.decorView).apply {
+                    isAppearanceLightNavigationBars = false
+                }
+                //window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
             }
         }
     }
@@ -189,7 +207,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         //handleNavigationAndScrolling()
 
         val actionBarColor = getColoredMaterialStatusBarColor()
-        updateStatusbarColor(actionBarColor)
+        updateStatusBarColor(actionBarColor)
         updateActionbarColor(actionBarColor)
     } */
 
@@ -216,7 +234,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         (mainCoordinatorLayout?.layoutParams as? FrameLayout.LayoutParams)?.topMargin = statusBarHeight
     }*/
 
-    // colorize the top toolbar and statusbar at scrolling down a bit
+    // colorize the top toolbar and statusBar at scrolling down a bit
     /*fun setupMaterialScrollListener(scrollingView: ScrollingView?, toolbar: Toolbar) {
         this.scrollingView = scrollingView
         this.toolbar = toolbar
@@ -285,7 +303,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 bgColor.getContrastColor()}*/
             else -> primaryColor.getContrastColor()
         }
-        updateStatusbarColor(bgColor)
+        updateStatusBarColor(bgColor)
 
         toolbar.background.applyColorFilter(actionBarColor)
         toolbar.setTitleTextColor(contrastColor)
@@ -325,9 +343,9 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         primaryColor: Int? = null,
         bgColor: Int? = null
     ) {
-        val statusBarColor = getProperActionBarColor()
+        val actionBarColor = getProperActionBarColor()
 
-        val contrastColor = statusBarColor.getContrastColor()
+        val contrastColor = actionBarColor.getContrastColor()
         if (toolbarNavigationIcon != NavigationIcon.None) {
             val drawableId = if (toolbarNavigationIcon == NavigationIcon.Cross) R.drawable.ic_cross_vector else R.drawable.ic_arrow_left_vector
             toolbar.navigationIcon = resources.getColoredDrawableWithColor(drawableId, contrastColor)
@@ -385,161 +403,192 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         //window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
     }*/
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        val partition = try {
-            checkedDocumentPath.substring(9, 18)
-        } catch (e: Exception) {
-            ""
+    val createDocumentSdk30 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data?.data != null) {
+
+            val treeUri = result.data!!.data!!
+            val checkedUri = buildDocumentUriSdk30(checkedDocumentPath)
+
+            if (treeUri != checkedUri) {
+                toast(getString(R.string.wrong_folder_selected, checkedDocumentPath))
+                return@registerForActivityResult
+            }
+
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            applicationContext.contentResolver.takePersistableUriPermission(treeUri, takeFlags)
+            val funAfter = funAfterSdk30Action
+            funAfterSdk30Action = null
+            funAfter?.invoke(true)
+        } else {
+            funAfterSdk30Action?.invoke(false)
         }
+    }
 
-        val sdOtgPattern = Pattern.compile(SD_OTG_SHORT)
-        if (requestCode == CREATE_DOCUMENT_SDK_30) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+    val openDocumentTreeForSdk30 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data?.data != null) {
+            val treeUri = result.data!!.data!!
+            val checkedUri = createFirstParentTreeUri(checkedDocumentPath)
 
-                val treeUri = resultData.data
-                val checkedUri = buildDocumentUriSdk30(checkedDocumentPath)
+            if (treeUri != checkedUri) {
+                val level = getFirstParentLevel(checkedDocumentPath)
+                val firstParentPath = checkedDocumentPath.getFirstParentPath(this, level)
+                toast(getString(R.string.wrong_folder_selected, humanizePath(firstParentPath)))
+                return@registerForActivityResult
+            }
 
-                if (treeUri != checkedUri) {
-                    toast(getString(R.string.wrong_folder_selected, checkedDocumentPath))
-                    return
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            applicationContext.contentResolver.takePersistableUriPermission(treeUri, takeFlags)
+            val funAfter = funAfterSdk30Action
+            funAfterSdk30Action = null
+            funAfter?.invoke(true)
+        } else {
+            funAfterSdk30Action?.invoke(false)
+        }
+    }
+
+    val openDocumentTreeForAndroidDataOrOBB = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data?.data != null) {
+            if (isProperAndroidRoot(checkedDocumentPath, result.data?.data!!)) {
+                if (result.data!!.dataString == baseConfig.OTGTreeUri || result.data!!.dataString == baseConfig.sdTreeUri) {
+                    val pathToSelect = createAndroidDataOrObbPath(checkedDocumentPath)
+                    toast(getString(R.string.wrong_folder_selected, pathToSelect))
+                    return@registerForActivityResult
                 }
+
+                val treeUri = result.data!!.data
+                storeAndroidTreeUri(checkedDocumentPath, treeUri.toString())
 
                 val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                applicationContext.contentResolver.takePersistableUriPermission(treeUri, takeFlags)
-                val funAfter = funAfterSdk30Action
-                funAfterSdk30Action = null
-                funAfter?.invoke(true)
+                applicationContext.contentResolver.takePersistableUriPermission(treeUri!!, takeFlags)
+                funAfterSAFPermission?.invoke(true)
+                funAfterSAFPermission = null
             } else {
-                funAfterSdk30Action?.invoke(false)
-            }
-
-        } else if (requestCode == OPEN_DOCUMENT_TREE_FOR_SDK_30) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
-                val treeUri = resultData.data
-                val checkedUri = createFirstParentTreeUri(checkedDocumentPath)
-
-                if (treeUri != checkedUri) {
-                    val level = getFirstParentLevel(checkedDocumentPath)
-                    val firstParentPath = checkedDocumentPath.getFirstParentPath(this, level)
-                    toast(getString(R.string.wrong_folder_selected, humanizePath(firstParentPath)))
-                    return
-                }
-
-                val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                applicationContext.contentResolver.takePersistableUriPermission(treeUri, takeFlags)
-                val funAfter = funAfterSdk30Action
-                funAfterSdk30Action = null
-                funAfter?.invoke(true)
-            } else {
-                funAfterSdk30Action?.invoke(false)
-            }
-
-        } else if (requestCode == OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
-                if (isProperAndroidRoot(checkedDocumentPath, resultData.data!!)) {
-                    if (resultData.dataString == baseConfig.OTGTreeUri || resultData.dataString == baseConfig.sdTreeUri) {
-                        val pathToSelect = createAndroidDataOrObbPath(checkedDocumentPath)
-                        toast(getString(R.string.wrong_folder_selected, pathToSelect))
-                        return
+                toast(getString(R.string.wrong_folder_selected, createAndroidDataOrObbPath(checkedDocumentPath)))
+                Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                    if (isRPlus()) {
+                        putExtra(DocumentsContract.EXTRA_INITIAL_URI, createAndroidDataOrObbUri(checkedDocumentPath))
                     }
-
-                    val treeUri = resultData.data
-                    storeAndroidTreeUri(checkedDocumentPath, treeUri.toString())
-
-                    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    applicationContext.contentResolver.takePersistableUriPermission(treeUri!!, takeFlags)
-                    funAfterSAFPermission?.invoke(true)
-                    funAfterSAFPermission = null
-                } else {
-                    toast(getString(R.string.wrong_folder_selected, createAndroidDataOrObbPath(checkedDocumentPath)))
-                    Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                        if (isRPlus()) {
-                            putExtra(DocumentsContract.EXTRA_INITIAL_URI, createAndroidDataOrObbUri(checkedDocumentPath))
-                        }
-
-                        try {
-                            startActivityForResult(this, requestCode)
-                        } catch (e: Exception) {
-                            showErrorToast(e)
-                        }
-                    }
-                }
-            } else {
-                funAfterSAFPermission?.invoke(false)
-            }
-        } else if (requestCode == OPEN_DOCUMENT_TREE_SD) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
-                val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition).matches() || (sdOtgPattern.matcher(partition)
-                    .matches() && resultData.dataString!!.contains(partition))
-                if (isProperSDRootFolder(resultData.data!!) && isProperPartition) {
-                    if (resultData.dataString == baseConfig.OTGTreeUri) {
-                        toast(R.string.sd_card_usb_same)
-                        return
-                    }
-
-                    saveTreeUri(resultData)
-                    funAfterSAFPermission?.invoke(true)
-                    funAfterSAFPermission = null
-                } else {
-                    toast(R.string.wrong_root_selected)
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
 
                     try {
-                        startActivityForResult(intent, requestCode)
+                        retryOpenDocument(this)
+                        //startActivityForResult(this, requestCode)
                     } catch (e: Exception) {
                         showErrorToast(e)
                     }
                 }
-            } else {
-                funAfterSAFPermission?.invoke(false)
             }
-        } else if (requestCode == OPEN_DOCUMENT_TREE_OTG) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
-                val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition).matches() || (sdOtgPattern.matcher(partition)
-                    .matches() && resultData.dataString!!.contains(partition))
-                if (isProperOTGRootFolder(resultData.data!!) && isProperPartition) {
-                    if (resultData.dataString == baseConfig.sdTreeUri) {
-                        funAfterSAFPermission?.invoke(false)
-                        toast(R.string.sd_card_usb_same)
-                        return
-                    }
-                    baseConfig.OTGTreeUri = resultData.dataString!!
-                    baseConfig.OTGPartition = baseConfig.OTGTreeUri.removeSuffix("%3A").substringAfterLast('/').trimEnd('/')
-                    updateOTGPathFromPartition()
+        } else {
+            funAfterSAFPermission?.invoke(false)
+        }
+    }
+    private fun retryOpenDocument(intent: Intent) {
+        openDocumentTreeForAndroidDataOrOBB.launch(intent)
+    }
 
-                    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    applicationContext.contentResolver.takePersistableUriPermission(resultData.data!!, takeFlags)
+    private fun tryGetPartition() = try {
+        checkedDocumentPath.substring(9, 18)
+    } catch (ignore: Exception) {
+        ""
+    }
 
-                    funAfterSAFPermission?.invoke(true)
-                    funAfterSAFPermission = null
-                } else {
-                    toast(R.string.wrong_root_selected_usb)
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+    private fun retryOpenSd(intent: Intent) {
+        openDocumentTreeSd.launch(intent)
+    }
 
-                    try {
-                        startActivityForResult(intent, requestCode)
-                    } catch (e: Exception) {
-                        showErrorToast(e)
-                    }
+    val openDocumentTreeSd = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data!!.data != null) {
+            val partition = tryGetPartition()
+            val sdOtgPattern = Pattern.compile(SD_OTG_SHORT)
+            val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition).matches() || (sdOtgPattern.matcher(partition)
+                .matches() && result.data!!.dataString!!.contains(partition))
+            if (isProperSDRootFolder(result.data!!.data!!) && isProperPartition) {
+                if (result.data!!.dataString == baseConfig.OTGTreeUri) {
+                    toast(R.string.sd_card_usb_same)
+                    return@registerForActivityResult
                 }
+
+                saveTreeUri(result.data!!)
+                funAfterSAFPermission?.invoke(true)
+                funAfterSAFPermission = null
             } else {
-                funAfterSAFPermission?.invoke(false)
+                toast(R.string.wrong_root_selected)
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+
+                try {
+                    retryOpenSd(intent)
+                    //startActivityForResult(intent, requestCode)
+                } catch (e: Exception) {
+                    showErrorToast(e)
+                }
             }
-        } else if (requestCode == SELECT_EXPORT_SETTINGS_FILE_INTENT && resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
-            val outputStream = contentResolver.openOutputStream(resultData.data!!)
+        } else {
+            funAfterSAFPermission?.invoke(false)
+        }
+    }
+
+    private fun retryOpenOtg(intent: Intent) {
+        openDocumentTreeOtg.launch(intent)
+    }
+
+    val openDocumentTreeOtg = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result  ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data!!.data != null) {
+            val partition = tryGetPartition()
+            val sdOtgPattern = Pattern.compile(SD_OTG_SHORT)
+            val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition).matches() || (sdOtgPattern.matcher(partition)
+                .matches() && result.data!!.dataString!!.contains(partition))
+            if (isProperOTGRootFolder(result.data!!.data!!) && isProperPartition) {
+                if (result.data!!.dataString == baseConfig.sdTreeUri) {
+                    funAfterSAFPermission?.invoke(false)
+                    toast(R.string.sd_card_usb_same)
+                    return@registerForActivityResult
+                }
+                baseConfig.OTGTreeUri = result.data!!.dataString!!
+                baseConfig.OTGPartition = baseConfig.OTGTreeUri.removeSuffix("%3A").substringAfterLast('/').trimEnd('/')
+                updateOTGPathFromPartition()
+
+                val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                applicationContext.contentResolver.takePersistableUriPermission(result.data!!.data!!, takeFlags)
+
+                funAfterSAFPermission?.invoke(true)
+                funAfterSAFPermission = null
+            } else {
+                toast(R.string.wrong_root_selected_usb)
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+
+                try {
+                    retryOpenOtg(intent)
+                    //startActivityForResult(intent, requestCode)
+                } catch (e: Exception) {
+                    showErrorToast(e)
+                }
+            }
+        } else {
+            funAfterSAFPermission?.invoke(false)
+        }
+    }
+
+    val selectExportSettingsFileIntent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data!!.data != null) {
+            val outputStream = contentResolver.openOutputStream(result.data!!.data!!)
             exportSettingsTo(outputStream, configItemsToExport)
-        } else if (requestCode == DELETE_FILE_SDK_30_HANDLER) {
-            funAfterSdk30Action?.invoke(resultCode == Activity.RESULT_OK)
-        } else if (requestCode == RECOVERABLE_SECURITY_HANDLER) {
-            funRecoverableSecurity?.invoke(resultCode == Activity.RESULT_OK)
-            funRecoverableSecurity = null
-        } else if (requestCode == UPDATE_FILE_SDK_30_HANDLER) {
-            funAfterUpdate30File?.invoke(resultCode == Activity.RESULT_OK)
-        } else if (requestCode == MANAGE_MEDIA_RC) {
-            funAfterManageMediaPermission?.invoke()
         }
+    }
+
+    val deleteFileSdk30Handler = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        funAfterSdk30Action?.invoke(result.resultCode == Activity.RESULT_OK)
+    }
+
+    val recoverableSecurityHandler = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        funRecoverableSecurity?.invoke(result.resultCode == Activity.RESULT_OK)
+        funRecoverableSecurity = null
+    }
+
+    val updateFileSdk30Handler = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        funAfterUpdate30File?.invoke(result.resultCode == Activity.RESULT_OK)
+    }
+
+    val manageMediaRc = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        funAfterManageMediaPermission?.invoke()
     }
 
     private fun saveTreeUri(resultData: Intent) {
@@ -721,14 +770,16 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         WritePermissionDialog(this, Mode.Otg) {
             Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 try {
-                    startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
+                    openDocumentTreeOtg.launch(this)
+                    //startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                     return@apply
                 } catch (e: Exception) {
                     type = "*/*"
                 }
 
                 try {
-                    startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
+                    openDocumentTreeOtg.launch(this)
+                    //startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                 } catch (e: ActivityNotFoundException) {
                     toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
                 } catch (e: Exception) {
@@ -744,8 +795,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         if (isRPlus()) {
             funAfterSdk30Action = callback
             try {
-                val deleteRequest = MediaStore.createDeleteRequest(contentResolver, uris).intentSender
-                startIntentSenderForResult(deleteRequest, DELETE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
+                val deleteRequest = MediaStore.createDeleteRequest(contentResolver, uris)
+                val request = IntentSenderRequest.Builder(deleteRequest).build()
+                deleteFileSdk30Handler.launch(request)
+                //startIntentSenderForResult(deleteRequest, DELETE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -761,7 +814,9 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             funAfterUpdate30File = callback
             try {
                 val writeRequest = MediaStore.createWriteRequest(contentResolver, uris).intentSender
-                startIntentSenderForResult(writeRequest, UPDATE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
+                val request = IntentSenderRequest.Builder(writeRequest).build()
+                updateFileSdk30Handler.launch(request)
+                //startIntentSenderForResult(writeRequest, UPDATE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -779,7 +834,9 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 funRecoverableSecurity = callback
                 val recoverableSecurityException = securityException as? RecoverableSecurityException ?: throw securityException
                 val intentSender = recoverableSecurityException.userAction.actionIntent.intentSender
-                startIntentSenderForResult(intentSender, RECOVERABLE_SECURITY_HANDLER, null, 0, 0, 0)
+                val request = IntentSenderRequest.Builder(intentSender).build()
+                recoverableSecurityHandler.launch(request)
+                //startIntentSenderForResult(intentSender, RECOVERABLE_SECURITY_HANDLER, null, 0, 0, 0)
             } else {
                 callback(false)
             }
@@ -791,7 +848,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         Intent(Settings.ACTION_REQUEST_MANAGE_MEDIA).apply {
             data = Uri.parse("package:$packageName")
             try {
-                startActivityForResult(this, MANAGE_MEDIA_RC)
+                manageMediaRc.launch(this)
+                //startActivityForResult(this, MANAGE_MEDIA_RC)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -921,7 +979,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     addCategory(Intent.CATEGORY_OPENABLE)
 
                     try {
-                        startActivityForResult(this, SELECT_EXPORT_SETTINGS_FILE_INTENT)
+                        selectExportSettingsFileIntent.launch(this)
+                        //startActivityForResult(this, SELECT_EXPORT_SETTINGS_FILE_INTENT)
                     } catch (e: ActivityNotFoundException) {
                         toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
                     } catch (e: Exception) {

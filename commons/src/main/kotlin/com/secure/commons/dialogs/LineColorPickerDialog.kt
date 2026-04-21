@@ -60,8 +60,8 @@ class LineColorPickerDialog(
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
-            .setNegativeButton(R.string.cancel) { dialog, which -> dialogDismissed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
+            .setNegativeButton(R.string.cancel) { _, _ -> dialogDismissed() }
             .setOnCancelListener { dialogDismissed() }
             .apply {
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->

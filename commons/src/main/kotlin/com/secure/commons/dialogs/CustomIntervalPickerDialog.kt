@@ -18,7 +18,7 @@ class CustomIntervalPickerDialog(val activity: Activity, val selectedSeconds: In
 
     init {
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialogInterface, i -> confirmReminder() }
+            .setPositiveButton(R.string.ok) { _, _ -> confirmReminder() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->
@@ -65,7 +65,7 @@ class CustomIntervalPickerDialog(val activity: Activity, val selectedSeconds: In
     private fun confirmReminder() {
         val value = binding.dialogCustomIntervalValue.value
         val multiplier = getMultiplier(binding.dialogRadioView.checkedRadioButtonId)
-        val minutes = Integer.valueOf(if (value.isEmpty()) "0" else value)
+        val minutes = Integer.valueOf(value.ifEmpty { "0" })
         callback(minutes * multiplier)
         activity.hideKeyboard()
         dialog?.dismiss()

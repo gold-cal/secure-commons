@@ -336,7 +336,7 @@ abstract class MyRecyclerViewListAdapter<T>(
     open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(item: T, allowSingleClick: Boolean, allowLongClick: Boolean, callback: (itemView: View, adapterPosition: Int) -> Unit): View {
             return itemView.apply {
-                callback(this, adapterPosition)
+                callback(this, bindingAdapterPosition) //adapterPosition
 
                 if (allowSingleClick) {
                     setOnClickListener { viewClicked(item) }
@@ -350,7 +350,7 @@ abstract class MyRecyclerViewListAdapter<T>(
 
         fun viewClicked(any: T) {
             if (actModeCallback.isSelectable) {
-                val currentPosition = adapterPosition - positionOffset
+                val currentPosition = bindingAdapterPosition - positionOffset
                 val isSelected = selectedKeys.contains(getItemSelectionKey(currentPosition))
                 toggleItemSelection(!isSelected, currentPosition, true)
             } else {
@@ -360,7 +360,7 @@ abstract class MyRecyclerViewListAdapter<T>(
         }
 
         fun viewLongClicked() {
-            val currentPosition = adapterPosition - positionOffset
+            val currentPosition = bindingAdapterPosition - positionOffset
             if (!actModeCallback.isSelectable) {
                 activity.startActionMode(actModeCallback)
             }
