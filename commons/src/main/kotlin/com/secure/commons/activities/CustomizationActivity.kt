@@ -76,7 +76,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
         if (!baseConfig.isUsingSystemTheme) {
             updateBackgroundColor(getCurrentBackgroundColor())
-            updateStatusbarColor(getCurrentStatusBarColor())
+            updateStatusBarColor(getCurrentStatusBarColor())
         }
 
         /*curPrimaryLineColorPicker?.getSpecificColor()?.apply {
@@ -214,7 +214,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateMenuItemColors(binding.customizationToolbar.menu)
             setupToolbar(binding.customizationToolbar, NavigationIcon.Cross,
                 primaryColor = curPrimaryColor, bgColor = curBackgroundColor)
-            updateStatusbarColor(getCurrentStatusBarColor())
+            updateStatusBarColor(getCurrentStatusBarColor())
             updateNavigationBarColor(curBackgroundColor)
         }
     }
@@ -262,7 +262,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         refreshMenuItems()
         updateLabelColors(getCurrentTextColor())
         updateBackgroundColor(getCurrentBackgroundColor())
-        updateStatusbarColor(getCurrentStatusBarColor())
+        updateStatusBarColor(getCurrentStatusBarColor())
         updateAutoThemeFields()
     }
 
@@ -411,7 +411,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private fun setCurrentBackgroundColor(color: Int) {
         curBackgroundColor = color
         updateBackgroundColor(color)
-        updateStatusbarColor(color)
+        updateStatusBarColor(color)
     }
 
     private fun setCurrentPrimaryColor(color: Int) {

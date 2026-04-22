@@ -26,6 +26,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.biometric.auth.AuthPromptCallback
 import androidx.biometric.auth.AuthPromptHost
 import androidx.biometric.auth.Class2BiometricAuthPrompt
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.FragmentActivity
@@ -68,7 +69,8 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
                     Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                         putExtra(EXTRA_SHOW_ADVANCED, true)
                         try {
-                            startActivityForResult(this, OPEN_DOCUMENT_TREE_SD)
+                            openDocumentTreeSd.launch(this)
+                            //startActivityForResult(this, OPEN_DOCUMENT_TREE_SD)
                             checkedDocumentPath = path
                             return@apply
                         } catch (e: Exception) {
@@ -76,7 +78,8 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
                          }
 
                         try {
-                            startActivityForResult(this, OPEN_DOCUMENT_TREE_SD)
+                            openDocumentTreeSd.launch(this)
+                            //startActivityForResult(this, OPEN_DOCUMENT_TREE_SD)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
                             toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
@@ -104,7 +107,8 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
                         putExtra(EXTRA_SHOW_ADVANCED, true)
                         putExtra(DocumentsContract.EXTRA_INITIAL_URI, createFirstParentTreeUriUsingRootTree(path))
                         try {
-                            startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_SDK_30)
+                            openDocumentTreeForSdk30.launch(this)
+                            //startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_SDK_30)
                             checkedDocumentPath = path
                             return@apply
                         } catch (e: Exception) {
@@ -112,7 +116,8 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
                         }
 
                         try {
-                            startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_SDK_30)
+                            openDocumentTreeForSdk30.launch(this)
+                            //startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_SDK_30)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
                             toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
@@ -142,7 +147,8 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
                         putExtra(DocumentsContract.EXTRA_INITIAL_URI, buildDocumentUriSdk30(path.getParentPath()))
                         putExtra(Intent.EXTRA_TITLE, path.getFilenameFromPath())
                         try {
-                            startActivityForResult(this, CREATE_DOCUMENT_SDK_30)
+                            createDocumentSdk30.launch(this)
+                            //startActivityForResult(this, CREATE_DOCUMENT_SDK_30)
                             checkedDocumentPath = path
                             return@apply
                         } catch (e: Exception) {
@@ -150,7 +156,8 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
                         }
 
                         try {
-                            startActivityForResult(this, CREATE_DOCUMENT_SDK_30)
+                            createDocumentSdk30.launch(this)
+                            //startActivityForResult(this, CREATE_DOCUMENT_SDK_30)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
                             toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
@@ -177,7 +184,8 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
                             putExtra(EXTRA_SHOW_ADVANCED, true)
                             putExtra(DocumentsContract.EXTRA_INITIAL_URI, createAndroidDataOrObbUri(path))
                             try {
-                                startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB)
+                                openDocumentTreeForAndroidDataOrOBB.launch(this)
+                                //startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB)
                                 checkedDocumentPath = path
                                 return@apply
                             } catch (e: Exception) {
@@ -185,7 +193,8 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
                             }
 
                             try {
-                                startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB)
+                                openDocumentTreeForAndroidDataOrOBB.launch(this)
+                                //startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB)
                                 checkedDocumentPath = path
                             } catch (e: ActivityNotFoundException) {
                                 toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
@@ -218,7 +227,8 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
             WritePermissionDialog(this, Mode.Otg) {
                 Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                     try {
-                        startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
+                        openDocumentTreeOtg.launch(this)
+                        //startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                         checkedDocumentPath = path
                         return@apply
                     } catch (e: Exception) {
@@ -226,7 +236,8 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
                     }
 
                     try {
-                        startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
+                        openDocumentTreeOtg.launch(this)
+                        //startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                         checkedDocumentPath = path
                     } catch (e: ActivityNotFoundException) {
                         toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
@@ -678,8 +689,8 @@ fun Activity.setupDialogStuff(
             getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
 
             val bgDrawable = when {
-                isBlackAndWhiteTheme() -> resources.getDrawable(R.drawable.black_dialog_background, theme)
-                baseConfig.isUsingSystemTheme -> resources.getDrawable(R.drawable.dialog_you_background, theme)
+                isBlackAndWhiteTheme() -> ResourcesCompat.getDrawable(resources, R.drawable.black_dialog_background, theme)
+                baseConfig.isUsingSystemTheme -> ResourcesCompat.getDrawable(resources, R.drawable.dialog_you_background, theme)
                 else -> resources.getColoredDrawableWithColor(R.drawable.dialog_bg, baseConfig.backgroundColor)
             }
 

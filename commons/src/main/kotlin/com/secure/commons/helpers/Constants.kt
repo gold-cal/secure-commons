@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.core.content.res.ResourcesCompat
 import com.secure.commons.R
 import com.secure.commons.overloads.times
 
@@ -202,16 +203,16 @@ const val LICENSE_M3U_PARSER = 1073741824L
 const val LICENSE_ANDROID_LAME = 2147483648L
 
 // global intents
-const val OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB = 1000
+//const val OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB = 1000
 //const val OPEN_DOCUMENT_TREE_OTG = 1001
 //const val OPEN_DOCUMENT_TREE_SD = 1002
 //const val OPEN_DOCUMENT_TREE_FOR_SDK_30 = 1003
-const val REQUEST_SET_AS = 1004
-const val REQUEST_EDIT_IMAGE = 1005
+//const val REQUEST_SET_AS = 1004
+//const val REQUEST_EDIT_IMAGE = 1005
 //const val SELECT_EXPORT_SETTINGS_FILE_INTENT = 1006
-const val REQUEST_CODE_SET_DEFAULT_DIALER = 1007
-const val CREATE_DOCUMENT_SDK_30 = 1008
-const val REQUEST_CODE_SET_DEFAULT_CALLER_ID = 1010
+//const val REQUEST_CODE_SET_DEFAULT_DIALER = 1007
+//const val CREATE_DOCUMENT_SDK_30 = 1008
+//const val REQUEST_CODE_SET_DEFAULT_CALLER_ID = 1010
 
 // sorting
 const val SORT_ORDER = "sort_order"
@@ -476,7 +477,8 @@ fun getFilePlaceholderDrawables(context: Context): HashMap<String, Drawable> {
         put("xml", R.drawable.ic_file_xml)
         put("zip", R.drawable.ic_file_zip)
     }.forEach { (key, value) ->
-        fileDrawables[key] = context.resources.getDrawable(value)
+        fileDrawables[key] = ResourcesCompat.getDrawable(context.resources, value, null)!!
+            //context.resources.getDrawable(value)
     }
     return fileDrawables
 }
